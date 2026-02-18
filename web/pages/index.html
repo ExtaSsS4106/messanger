@@ -13,8 +13,10 @@
         <h1>Hello, world!</h1>
 
     </body>
-        <script src="/eel.js"></script>
-        <script src="../scripts/views.js"></script>
-        <script src="../scripts/init.js"></script>
-        <script src="../scripts/main.js"></script>
+        <script src="/eel.js"></script>              <!-- 1. Сначала eel (обязательно) -->
+        <script src="../scripts/register.js"></script> 
+        <script src="../scripts/login.js"></script>   <!-- 2. Потом классы -->
+        <script src="../scripts/main.js"></script>    <!-- 3. Потом другие классы/функции -->
+        <script src="../scripts/views.js"></script>   <!-- 4. Потом функции, использующие классы -->
+        <script src="../scripts/init.js"></script>    <!-- 5. Инициализация в самом конце -->
 </html>

@@ -3,18 +3,23 @@ console.log("views.js inited")
 
 
 async function loadPage(value) {
+    let content;
     switch(value) {
         case "homepage":
             content = await eel.start_page()();
             document.querySelector('body').innerHTML = content;
             break;
         case "login":
+            let loginPage = new Login_page();
             content = await eel.login()();
             document.querySelector('body').innerHTML = content;
+            loginPage.init_page();
             break;
         case "register":
-            content = await eel.register()();
+            let RegPage = new Register_page();
+            content = await eel.sign_up()();
             document.querySelector('body').innerHTML = content;
+            RegPage.init_page();
             break;
         case "main":
             content = await eel.main()();

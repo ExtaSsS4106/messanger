@@ -1,23 +1,15 @@
 
 
-    <form class="form" action="" method="post">
+<div class="form">
+    <h1 class="titlereglog">Регистрация</h1>
+    
+    <input id="username" class="input" type="text" placeholder="имя">
+    <input id="email" class="input" type="email" placeholder="e-mail">
+    <input id="password1" class="input" type="password" placeholder="Пароль">
+    <input id="password2" class="input" type="password" placeholder="Пароль еще раз">
 
-        <h1 class="titlereglog">Регистрация</h1>
-
-        <input class="input" type="text" placeholder="имя">
-
-        <input class="input" type="email" placeholder="e-mail">
-
-        <input class="input" type="password" placeholder="Пароль">
-
-        <input class="input" type="password" placeholder="Пароль еще раз">
-
-        <button class="reglogbtn" type="submit">
-
-            Регистрация
-            
-        </button>
-        <button type="button" id="backFromLogin" class="secondary" onclick="loadPage('homepage')">
-        <i class="fas fa-arrow-left"></i> Назад
-        </button>
-    </form>
+    <button id="submit-btn" class="reglogbtn" type="submit">Регистрация</button>
+    <button type="button" id="backFromLogin" class="secondary" onclick="loadPage('homepage')">
+    <i class="fas fa-arrow-left"></i> Назад
+    </button>
+</div>
