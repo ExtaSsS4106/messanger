@@ -4,8 +4,15 @@
 body {
     background-color: #5E5E5E;
     font-family: Arial, Helvetica, sans-serif;
+    height: 90vh;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
 }
 
 /* Заголовок главный */
@@ -100,20 +107,57 @@ body {
 }
 
 /* ===== ТВОИ СТИЛИ ДЛЯ МЕССЕНДЖЕРА ===== */
-.messenger-container {
-    max-width: 540px;
+.panel-control {
+    width: 20%;
+    height: 90%;
     margin: 50px auto;
     padding: 15px;
     background-color: #989797;
     border-radius: 15px;
-}
 
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+.messages{
+    width: 100%;
+    flex-grow: 1;
+    background-color: #7E7E7E;
+    border-radius: 20px;
+    overflow-y: auto;
+}
+.messenger-chat {
+    flex-grow: 1;
+    width: 80%;
+    height: 90%;
+    margin: 50px auto;
+    padding: 15px;
+    background-color: #989797;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
 .user-header {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 32px;
     text-align: center;
     margin-bottom: 20px;
+}
+
+.chatsList{
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .search-input {
@@ -196,6 +240,7 @@ body {
 
 /* Стили для чата */
 .chat-header {
+    width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
@@ -242,6 +287,7 @@ body {
 }
 
 .message-input-area {
+    width: 100%;
     display: flex;
     gap: 10px;
     margin-top: 20px;

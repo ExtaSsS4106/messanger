@@ -16,6 +16,11 @@ async function loadPage(value) {
             content = await eel.register()();
             document.querySelector('body').innerHTML = content;
             break;
+        case "main":
+            content = await eel.main()();
+            document.querySelector('body').innerHTML = content;
+            displayChats();
+            break;
         default:
             console.log("nothing to show");
             document.querySelector('body').innerHTML = '<h1>Такой страницы не существует</h1>';

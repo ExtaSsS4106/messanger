@@ -1,0 +1,49 @@
+
+    <div class="panel-control">
+        <div class="user-header">User#228</div>
+        
+        <input type="text" class="search-input" id="searchInput" placeholder="Поиск..." onkeyup="searchUsers()">
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('chats')" id="chatsTab">Чаты</div>
+            <div class="tab" onclick="switchTab('friends')" id="friendsTab">Друзья</div>
+        </div>
+        
+        <div id="chatsList" class="chatsList">
+            <!-- Чаты загружаются через JS -->
+        </div>
+        
+        
+        <div class="action-buttons">
+            <button class="action-btn green" onclick="window.location.href='create-channel.html'">Создать канал</button>
+            <button class="action-btn gray" onclick="window.location.href='add-friend.html'">Добавить в друзья</button>
+        </div>
+    </div>
+
+
+    <div class="messenger-chat">
+        <div class="chat-header">
+            <a href="chats.html" class="back-btn">←</a>
+            <div class="chat-title" id="chatUserName">User#1234</div>
+            <button class="menu-btn" id="menuBtn">⋮</button>
+            
+            <div class="context-menu" id="contextMenu">
+                <button class="menu-item" onclick="addFriend()">Добавить в друзья</button>
+                <button class="menu-item" onclick="removeFriend()">Удалить из друзей</button>
+                <button class="menu-item" onclick="deleteChat()">Удалить чат</button>
+                <div class="menu-divider"></div>
+                <button class="menu-item" onclick="copyLink()">Скопировать ссылку</button>
+                <button class="menu-item danger" onclick="leaveChannel()">Выйти из канала</button>
+            </div>
+        </div>
+        
+        <div class="messages" id="messagesContainer">
+            <!-- Сообщения будут добавляться сюда через JS -->
+        </div>
+        
+        <div class="message-input-area">
+            <input type="text" class="message-field" id="messageInput" placeholder="Сообщение пользователя">
+            <button class="send-btn" onclick="sendMessage()">→</button>
+        </div>
+    </div>
+    <script src="../scripts/main.js"></script>
