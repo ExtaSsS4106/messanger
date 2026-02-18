@@ -56,13 +56,7 @@ body {
 .logbtn:hover {
     background-color: #686868;
 }
-.error{
-    color:#fa3f3f;
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    -webkit-text-stroke: 0.5px #080808;
-    
-}
+
 /* Формы регистрации/входа */
 .form {
     max-width: 540px;
