@@ -11,7 +11,10 @@ class Login_page {
         
         btn.addEventListener('click', () => {
             const data = this.get_data();
-            eel.login(data.username, data.password)();
+            const response = eel.login(data.username, data.password)();
+            if (response){
+                loadPage("main");
+            }
         });
     }
 }

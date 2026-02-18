@@ -15,6 +15,10 @@ class Views:
         return render("web/pages/registration/homepage.html")
     
     @eel.expose
+    def main():
+        return render("web/pages/main/main.html")
+    
+    @eel.expose
     def login(username=None, passwd=None):
         if username and passwd:
             print(username, passwd)
