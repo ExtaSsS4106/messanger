@@ -2,6 +2,8 @@
 .pylintrc
 __pycache__/
 
+main_app/migrations/
+
 .vscode
 .idea
 .env
