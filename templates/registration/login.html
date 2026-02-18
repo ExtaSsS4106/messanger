@@ -1,0 +1,42 @@
+{% extends "registration/form.html" %}
+{% block title %}Вход{% endblock %} 
+
+{% block content %}
+<form class="form" method="post">
+  {% csrf_token %}
+    <h1 class="titlereglog">Вход</h1>
+       <input class="input" 
+             name="username" 
+             placeholder="Имя пользователя" 
+             type="text" 
+             value="{{ form.username.value|default:'' }}"
+             required>
+      {% if form.username.errors %}
+        <p class="error">{{ form.username.errors.0 }}</p>
+      {% endif %}
+      
+      <input class="input" 
+             name="password" 
+             type="password" 
+             placeholder="Пароль" 
+             required>
+      {% if form.password.errors %}
+        <p class="error">{{ form.password.errors.0 }}</p>
+      {% endif %}
+      
+      {% if form.non_field_errors %}
+        <p class="error" id="loginError">
+          Неверное имя пользователя или пароль
+        </p>
+      {% endif %}
+      
+      <button class="reglogbtn" type="submit" id="doLoginBtn">
+        <i class="fas fa-sign-in-alt"></i> Войти
+      </button>
+      
+      <button type="button" id="backFromLogin" class="secondary" onclick="window.location.href='/'">
+        <i class="fas fa-arrow-left"></i> Назад
+      </button>
+  
+</form>
+{% endblock %}

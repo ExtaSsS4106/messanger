@@ -1,0 +1,41 @@
+{% extends "registration/form.html" %}
+{% block title %}Sign up{% endblock %}
+
+    {% block content %}
+    <form class="form" action="" method="post">
+        {% csrf_token %}
+        
+        <h1 class="titlereglog">Регистрация</h1>
+
+        <input class="input" type="text" name="username" placeholder="Имя пользователя" value="{{ form.username.value|default:'' }}" required>
+        {% if form.username.errors %}
+            <p class="error">{{ form.username.errors.0 }}</p>
+        {% endif %}
+
+        <input class="input" type="email" name="email" placeholder="E-mail" value="{{ form.email.value|default:'' }}" required>
+        {% if form.email.errors %}
+            <p class="error">{{ form.email.errors.0 }}</p>
+        {% endif %}
+
+        <input class="input" type="password" name="password1" placeholder="Пароль" required>
+        {% if form.password1.errors %}
+            <p class="error">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+
+        <input class="input" type="password" name="password2" placeholder="Пароль еще раз" required>
+        {% if form.password2.errors %}
+            <p class="error">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <p class="error">{{ form.non_field_errors.0 }}</p>
+        {% endif %}
+
+        <button class="reglogbtn" type="submit">
+            Регистрация
+        </button>
+        <button type="button" id="backFromLogin" class="secondary" onclick="window.location.href='/'">
+        <i class="fas fa-arrow-left"></i> Назад
+      </button>
+    </form>
+    {% endblock %}
