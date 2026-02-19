@@ -9,7 +9,7 @@ class Friends(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user1', 'user2'], name='unique_friendship'),
-            models.CheckConstraint(check=~models.Q(user1=models.F('user2')), name='no_self_friend'),
+            models.CheckConstraint(condition=~models.Q(user1=models.F('user2')), name='no_self_friend'),
         ]
 
     def save(self, *args, **kwargs):
