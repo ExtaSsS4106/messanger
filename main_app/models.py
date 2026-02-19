@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db import transaction
 
 class Friends(models.Model):
     user1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships1', on_delete=models.CASCADE)
@@ -24,7 +25,9 @@ class Chat(models.Model):
     CHAT_TYPES = [(PRIVATE, 'Private'), (GROUP, 'Group')]
 
     type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
+    name = models.CharField(max_length=255, blank=True)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserChat', related_name='chats')
+    
 
 class UserChat(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -49,3 +52,49 @@ class Message(models.Model):
         indexes = [
             models.Index(fields=['user']),
         ]
+        
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="sent_friend_requests",
+        on_delete=models.CASCADE,
+    )
+    receiver = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="received_friend_requests",
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["sender", "receiver"],
+                name="unique_friend_request",
+            ),
+            models.CheckConstraint(
+                check=~models.Q(sender=models.F("receiver")),
+                name="no_self_request",
+            ),
+        ]
+
+class FriendRequest(models.Model):
+    def accept(self):
+        if self.accepted:
+            return
+
+        with transaction.atomic():
+            Friends.objects.get_or_create(
+                user1=min(self.sender, self.receiver, key=lambda u: u.id),
+                user2=max(self.sender, self.receiver, key=lambda u: u.id),
+            )
+
+            chat = Chat.objects.create(type=Chat.PRIVATE)
+            UserChat.objects.bulk_create([
+                UserChat(user=self.sender, chat=chat),
+                UserChat(user=self.receiver, chat=chat),
+            ])
+
+            self.accepted = True
+            self.save(update_fields=["accepted"])
