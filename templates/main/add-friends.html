@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить друга</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% csrf_token %}
+    <div class="messenger-container">
+        <a href="/home" class="back-btn" style="display: inline-block; margin-bottom: 20px;">← Назад</a>
+        <div class="page-title">Добавить друга</div>
+        {% if users %}
+            {% for user_ in users %}
+                {% if user_.id != user.id %}
+                    <div class="user-card">
+                    <div class="user-id">{{user_.username}}</div>
+                    <button id="{{user_.id}}" class="send-request-btn" onclick="sendFriendRequest('{{user_.id}}')">добавить в друзья</button>
+                    </div>    
+                {% endif %}
+            {% endfor %} 
+        {% else %}
+            <h1>No data</h1>
+        {% endif %}
+
+
+
+    </div>
+    
+    <script>
+        function sendFriendRequest(id) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/add_new_friend/${id}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken},
+            });
+        }
+    </script>
+</body>
+</html>

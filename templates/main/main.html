@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чаты</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% csrf_token %}
+    <div class="panel-control">
+        <div class="user-header">User#228</div>
+        
+        <input type="text" class="search-input" id="searchInput" placeholder="Поиск..." onkeyup="searchUsers()">
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('chats')" id="chatsTab">Чаты</div>
+            <div class="tab" onclick="switchTab('friends')" id="friendsTab">Друзья</div>
+        </div>
+        
+        <div id="chatsList" class="chatsList">
+            <!-- Чаты загружаются через JS -->
+        </div>
+        
+        
+        <div class="action-buttons">
+            <button class="action-btn green" onclick="window.location.href='/create_channel'">Создать канал</button>
+            <button class="action-btn gray" onclick="window.location.href='/add_friends'">Добавить в друзья</button>
+        </div>
+    </div>
+
+
+    <div class="messenger-chat">
+        <div class="chat-header">
+            <a href="chats.html" class="back-btn">←</a>
+            <div class="chat-title" id="chatUserName">User#1234</div>
+            <button class="menu-btn" id="menuBtn">⋮</button>
+            
+            <div class="context-menu" id="contextMenu">
+                <button class="menu-item" onclick="addFriend()">Добавить в друзья</button>
+                <button class="menu-item" onclick="removeFriend()">Удалить из друзей</button>
+                <button class="menu-item" onclick="deleteChat()">Удалить чат</button>
+                <div class="menu-divider"></div>
+                <button class="menu-item" onclick="copyLink()">Скопировать ссылку</button>
+                <button class="menu-item danger" onclick="leaveChannel()">Выйти из канала</button>
+            </div>
+        </div>
+        
+        <div class="messages" id="messagesContainer">
+            <!-- Сообщения будут добавляться сюда через JS -->
+        </div>
+        
+        <div class="message-input-area">
+            <input type="text" class="message-field" id="messageInput" placeholder="Сообщение пользователя">
+            <button class="send-btn" onclick="sendMessage()">→</button>
+        </div>
+    </div>
+    
+    
+</body>
+<script>
+    // Данные пользователей
+    let users = [
+        {id: 1234, name: 'User#1234', lastMessage: 'Привет!', time: '12:05'},
+        {id: 4321, name: 'User#4321', lastMessage: 'Как дела?', time: '11:30'},
+        {id: 1243, name: 'User#1243', lastMessage: 'Го в встречу', time: 'Вчера'},
+        {id: 2134, name: 'User#2134', lastMessage: 'Ок', time: 'Вчера'},
+    ];
+    
+    let friends = [];
+
+    // Загрузка друзей с сервера
+    async function loadFriendsFromServer() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        try {
+            const response = await fetch('/select_friends', {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+            });
+            
+            const data = await response.json();
+            console.log('Друзья с сервера:', data);
+            
+            if (data.friends_list) {
+                friends = data.friends_list.map(f => ({
+                    id: f.id,
+                    name: f.username
+                }));
+                
+                // Если открыта вкладка друзей, обновляем
+                if (document.getElementById('friendsTab').classList.contains('active')) {
+                    displayFriends();
+                }
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки друзей:', error);
+        }
+    }
+
+    async function open_chat(chat_id) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        try {
+            const response = await fetch('/open_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    "chat_id": chat_id
+                })
+            });
+            
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Ошибка загрузки друзей:', error);
+        }
+    }
+    
+    // Отображение чатов
+    function displayChats(filter = '') {
+        const container = document.getElementById('chatsList');
+        container.innerHTML = '';
+        
+        let filteredUsers = users.filter(u => 
+            u.name.toLowerCase().includes(filter.toLowerCase())
+        );
+        
+        filteredUsers.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-item';
+            userDiv.onclick = () => window.location.href = `chat.html?user=${user.id}`;
+            userDiv.innerHTML = `
+                <div class="user-avatar"></div>
+                <span class="user-name">${user.name}</span>
+            `;
+            container.appendChild(userDiv);
+        });
+    }
+    
+    // Отображение друзей
+    function displayFriends(filter = '') {
+        const container = document.getElementById('chatsList');
+        container.innerHTML = '';
+        
+        let filteredFriends = friends.filter(f => 
+            f.name.toLowerCase().includes(filter.toLowerCase())
+        );
+        
+        if (filteredFriends.length === 0) {
+            container.innerHTML = '<div class="no-data">Нет друзей</div>';
+            return;
+        }
+        
+        filteredFriends.forEach(friend => {
+            const friendDiv = document.createElement('div');
+            friendDiv.className = 'user-item';
+            friendDiv.onclick = () => open_chat(friend);
+            friendDiv.innerHTML = `
+                <div class="user-avatar"></div>
+                <div class="user-info">
+                    <span class="user-name">${friend.name}</span>
+                    <span class="user-status">online</span>
+                </div>
+            `;
+            container.appendChild(friendDiv);
+        });
+    }
+    
+    // Переключение между вкладками
+    function switchTab(tab) {
+        const chatsTab = document.getElementById('chatsTab');
+        const friendsTab = document.getElementById('friendsTab');
+        const searchFilter = document.getElementById('searchInput').value;
+        
+        if (tab === 'chats') {
+            chatsTab.classList.add('active');
+            friendsTab.classList.remove('active');
+            displayChats(searchFilter);
+        } else {
+            friendsTab.classList.add('active');
+            chatsTab.classList.remove('active');
+            displayFriends(searchFilter);
+        }
+    }
+    
+    // Поиск
+    function searchUsers() {
+        const filter = document.getElementById('searchInput').value;
+        const isFriendsTab = document.getElementById('friendsTab').classList.contains('active');
+        
+        if (isFriendsTab) {
+            displayFriends(filter);
+        } else {
+            displayChats(filter);
+        }
+    }
+    
+    // Загружаем при старте
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFriendsFromServer();
+        displayChats();
+    });
+</script>
+</html>
