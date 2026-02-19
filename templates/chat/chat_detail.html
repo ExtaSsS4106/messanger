@@ -1,0 +1,24 @@
+<h2>Чат: {{ chat.name if chat.name else "Приватный чат" }}</h2>
+
+<div id="messages" style="max-height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+    {% for msg in messages %}
+        <div style="margin-bottom: 10px;">
+            <strong>{{ msg.user.username if msg.user else "Удалённый пользователь" }}</strong>:
+            {% if msg.type == 'text' %}
+                {{ msg.text }}
+            {% elif msg.type == 'file' %}
+                <a href="{{ msg.file.url }}" target="_blank">Файл</a>
+            {% endif %}
+            <small style="color: gray;">{{ msg.id }}</small>
+        </div>
+    {% empty %}
+        <p>Сообщений пока нет</p>
+    {% endfor %}
+</div>
+
+<form method="post" enctype="multipart/form-data" style="margin-top: 10px;">
+    {% csrf_token %}
+    <textarea name="text" placeholder="Введите сообщение" style="width: 100%; height: 60px;"></textarea><br>
+    <input type="file" name="file"><br>
+    <button type="submit">Отправить</button>
+</form>
