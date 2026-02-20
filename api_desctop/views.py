@@ -148,3 +148,53 @@ def select_chats(request):
         data.append(x)
     
     return JsonResponse({"users_chats": data})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def send_friend_request(request):
+    data = json.loads(request.body)
+    user_id = data.get('user_id')
+    receiver = get_object_or_404(User, id=user_id)
+    if receiver == request.user:
+        return JsonResponse({"staus": "This is you"})
+    if Friends.objects.filter(
+        user1=min(request.user, receiver, key=lambda u: u.id),
+        user2=max(request.user, receiver, key=lambda u: u.id),
+    ).exists():
+        return JsonResponse({"staus": "Friends already exists"})
+    FriendRequest.objects.get_or_create(sender=request.user, receiver=receiver)
+    return JsonResponse({"staus": "Ok"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def accept_friend_request(request):
+    data = json.loads(request.body)
+    request_id = data.get('request_id')
+    fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
+    fr.accept()
+    return JsonResponse({"staus": "Ok"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def decline_friend_request(request):
+    data = json.loads(request.body)
+    request_id = data.get('request_id')
+    fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
+    fr.delete()
+    return JsonResponse({"staus": "Ok"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def chek_for_friends_requests(request):
+    fr_requsets = FriendRequest.objects.filter(receiver=request.user)
+    data = []
+    for fr in fr_requsets:
+        if fr.accept:
+            fr.delete()
+            continue
+        data.append({
+            "id": fr.id,
+            "friend_id": fr.sender.id,
+            "friend_name": fr.sender.username
+        })
+    return JsonResponse({"friends_requsets": data})

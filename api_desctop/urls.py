@@ -12,4 +12,7 @@ urlpatterns = [
     path('get_messages', views.get_messages),
     path('send_message', views.send_message),
     path('select_chats', views.select_chats),
+    path('send_friend_request', views.send_friend_request),
+    path('accept_friend_request', views.accept_friend_request),
+    path('decline_friend_request', views.decline_friend_request),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
