@@ -45,6 +45,7 @@ class Message(models.Model):
     FILE = 'file'
     TYPE_CHOICES = [(TEXT, 'Text'), (FILE, 'File')]
 
+    count = models.IntegerField()
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='messages')
     text = models.TextField(blank=True)
@@ -55,6 +56,16 @@ class Message(models.Model):
         indexes = [
             models.Index(fields=['user']),
         ]
+        ordering = ['count']
+        
+    def save(self, *args, **kwargs):
+        if not self.pk:  
+            last_message = Message.objects.filter(chat=self.chat).order_by('-count').first()
+            if last_message:
+                self.count = last_message.count + 1
+            else:
+                self.count = 1
+        super().save(*args, **kwargs)
 
 # ---------- Заявки в друзья ----------
 class FriendRequest(models.Model):
