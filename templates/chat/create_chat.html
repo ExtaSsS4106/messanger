@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-create-container">
+    <h2>Создать групповой чат</h2>
+
+    <form method="post" class="chat-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Название чата</label>
+            {{ form.name }}
+        </div>
+
+        <div class="form-group users-box">
+            <label>Выберите участников</label>
+            {{ form.users }}
+        </div>
+
+        <button type="submit" class="create-btn">Создать чат</button>
+    </form>
+</div>
+{% endblock %}

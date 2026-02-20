@@ -82,22 +82,62 @@ def remove_friend(request, user_id):
 # Создание группового чата
 @login_required
 def create_group_chat(request):
+    # получаем список друзей пользователя
+    friends_ids = Friends.objects.filter(
+        user1=request.user
+    ).values_list("user2", flat=True)
+
+    friends_ids2 = Friends.objects.filter(
+        user2=request.user
+    ).values_list("user1", flat=True)
+
+    friend_ids = list(friends_ids) + list(friends_ids2)
+    friends = User.objects.filter(id__in=friend_ids)
+
     if request.method == "POST":
         form = CreateGroupChatForm(request.POST)
+
         if form.is_valid():
-            name = form.cleaned_data["name"]
+            name = form.cleaned_data["name"].strip()
             users = form.cleaned_data["users"]
+
+            # защита: минимум 1 участник
+            if not users:
+                return render(request, "chat/create_group.html", {
+                    "form": form,
+                    "friends": friends,
+                    "error": "Выберите хотя бы одного участника"
+                })
+
+            # защита: нельзя добавлять не-друзей
+            for user in users:
+                if user not in friends:
+                    return HttpResponse("Можно добавлять только друзей", status=403)
+
             with transaction.atomic():
-                chat = Chat.objects.create(type=Chat.GROUP, name=name)
-                UserChat.objects.bulk_create(
-                    [UserChat(user=request.user, chat=chat)] +
-                    [UserChat(user=u, chat=chat) for u in users if u != request.user]
+                chat = Chat.objects.create(
+                    type=Chat.GROUP,
+                    name=name if name else "Новый чат"
                 )
-            return redirect("home")
+
+                # добавляем создателя
+                UserChat.objects.create(user=request.user, chat=chat)
+
+                # добавляем выбранных пользователей
+                UserChat.objects.bulk_create([
+                    UserChat(user=u, chat=chat)
+                    for u in users if u != request.user
+                ])
+
+            return redirect("chat_detail", chat_id=chat.id)
+
     else:
         form = CreateGroupChatForm()
-    return render(request, "chat/create_group.html", {"form": form})
 
+    return render(request, "chat/create_group.html", {
+        "form": form,
+        "friends": friends
+    })
 # Просмотр чата и переписка
 @login_required
 def chat_detail(request, chat_id):

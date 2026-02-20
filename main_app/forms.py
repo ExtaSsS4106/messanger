@@ -6,12 +6,20 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class CreateGroupChatForm(forms.Form):
-    name = forms.CharField(max_length=255, label="Название канала")
+class CreateChatForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-input",
+            "placeholder": "Название чата (для группового)"
+        })
+    )
+
     users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label="Участники",
+        required=True
     )
 
 class RegisterForm(UserCreationForm):
@@ -20,6 +28,18 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+        
+class CreateGroupChatForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        label="Название чата",
+        widget=forms.TextInput(attrs={'placeholder': 'Название чата'})
+    )
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Выберите участников"
+    )
 
 
 
