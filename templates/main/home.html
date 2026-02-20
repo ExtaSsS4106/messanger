@@ -461,12 +461,7 @@ function sendFriendRequest(userId) {
 document.addEventListener('DOMContentLoaded', function() {
     loadChats();
     
-    refreshInterval = setInterval(function() {
-        if (activeChatId) {
-            renderMessages();
-        }
-        loadChats();
-    }, 3000);
+
 });
 </script>
 

@@ -215,7 +215,7 @@ def open_private_chat(request, user_id):
             ])
     return redirect("chat_detail", chat_id=chat.id)
 
-@login_required
+"""@login_required
 def add_friend(request):
     # получаем список всех пользователей, кроме текущего
     users = User.objects.exclude(id=request.user.id)
@@ -231,7 +231,7 @@ def add_friend(request):
     users = users.exclude(id__in=all_friend_ids)
 
     return render(request, "main/add_friend.html", {"users": users})
-
+"""
 # ========== ИСПРАВЛЕННЫЕ API VIEWS ==========
 @login_required
 def get_user_chats(request):

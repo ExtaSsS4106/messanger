@@ -92,12 +92,11 @@ def get_messages(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         chat_id = data.get('chat_id')
-        messages = Message.objects.filter(chat__id = chat_id).order_by('count')
+        messages = Message.objects.filter(chat__id = chat_id).order_by('created_at')
         messages_list = []
         for msg in messages:
             messages_list.append({
                 'id': msg.id,
-                'count': msg.count,
                 'user': msg.user.username if msg.user else 'Unknown',
                 'text': msg.text,
                 'type': msg.type,
@@ -172,6 +171,7 @@ def accept_friend_request(request):
     request_id = data.get('request_id')
     fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
     fr.accept()
+    fr.delete()
     return JsonResponse({"staus": "Ok"})
 
 @api_view(['POST'])
@@ -183,13 +183,15 @@ def decline_friend_request(request):
     fr.delete()
     return JsonResponse({"staus": "Ok"})
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])   
 def chek_for_friends_requests(request):
     fr_requsets = FriendRequest.objects.filter(receiver=request.user)
+    print(fr_requsets)
+    
     data = []
     for fr in fr_requsets:
-        if fr.accept:
+        if fr.accept == True:
             fr.delete()
             continue
         data.append({
@@ -198,3 +200,28 @@ def chek_for_friends_requests(request):
             "friend_name": fr.sender.username
         })
     return JsonResponse({"friends_requsets": data})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])   
+def select_users_for_add(request):
+    user = request.user
+    
+    friends = Friends.objects.filter(Q(user1=user) | Q(user2=user))
+    
+    friend_ids = []
+    for f in friends:
+        if f.user1 == user:
+            friend_ids.append(f.user2.id)
+        else:
+            friend_ids.append(f.user1.id)
+    
+    users = User.objects.exclude(id=user.id).exclude(id__in=friend_ids)
+    
+    data = []
+    for u in users:
+        data.append({
+            'id': u.id,
+            'username': u.username,
+        })
+    
+    return JsonResponse({"users": data})

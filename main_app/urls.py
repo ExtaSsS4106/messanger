@@ -30,6 +30,5 @@ urlpatterns = [
     path('api/friend-requests/send/', views.send_friend_request_api, name='api_send_friend_request'),
     
     path('api/users/search/', views.search_users, name='api_search'),
-    path('add-friend/', views.add_friend, name='add_friend'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
