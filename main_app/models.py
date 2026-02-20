@@ -77,7 +77,7 @@ class FriendRequest(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["sender", "receiver"], name="unique_friend_request"),
-            models.CheckConstraint(check=~models.Q(sender=models.F("receiver")), name="no_self_request"),
+            models.CheckConstraint(condition=~models.Q(sender=models.F("receiver")), name="no_self_request"),
         ]
 
     # Принять заявку
