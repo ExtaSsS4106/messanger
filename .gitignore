@@ -2,7 +2,7 @@
 .pylintrc
 __pycache__/
 
-main_app/migrations/
+/main_app/migrations/
 
 .vscode
 .idea
