@@ -6,6 +6,7 @@
 
         let messages=[]
         let currentUser = '';
+        let usr_email = '';
 
         function renderMessages(messages) {
             const container = document.getElementById('messagesContainer');
@@ -13,7 +14,7 @@
 
             messages.forEach(msg => {
                 const div = document.createElement('div');
-                div.className = msg.user === 'User#228'
+                div.className = msg.user === currentUser
                     ? 'message-right'
                     : 'message-left';
                 div.innerHTML = `
@@ -26,30 +27,34 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
             if (!input.value || !activeChatId) return;
-            let lastCount = messages.length > 0
-            ? messages[messages.length - 1].count
-            : 0;
-                messages.push({
+            
+            const mess = ({
                 count: messages.length + 1,
                 chat: activeChatId,
-                user: 'User#228',
+                user: currentUser,
+                email: usr_email,
                 text: input.value,
                 type: 'text',
                 file: ''
             });
 
+            console.log(mess);
+            messages.push(mess);
+
+            await eel.send_message(mess)();
+
             input.value = '';
             loadMessages(activeChatId);
         }
 
-        async function openChat(user) {
-            activeChatId = user.chat_id;
+        async function openChat(chat) {
+            activeChatId = chat.chat_id;
             document.getElementById('chatUserAvatar');
-            document.getElementById('chatUserName').textContent = user.title;
-            const friendsList = await eel.get_messages(user.id)();
+            document.getElementById('chatUserName').textContent = chat.name;
+            const friendsList = await eel.get_messages(activeChatId)();
             console.log(friendsList)
             messages = friendsList;
             console.log(messages)
@@ -138,51 +143,88 @@
         // Отображение друзей
         async function displayFriends(filter = '') {
             const container = document.getElementById('chatsList');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="loading">Загрузка...</div>';
             
-            const friendsList = await eel.select_friends()();  
-            friends=friendsList;
-            let filteredFriends = friendsList.filter(f => 
-                f.username.toLowerCase().includes(filter.toLowerCase())
-            );
-            
-            filteredFriends.forEach(friend => {
-                const friendDiv = document.createElement('div');
-                friendDiv.className = 'user-item';
-                friendDiv.onclick = () => openChat({
-                    id: friend.id,
-                    title: friend.username,
-                    type: 'private',  
-                    chat_id: friend.chat_id
+            try {
+                const friendsList = await eel.select_friends()();  
+                friends = friendsList;
+                
+                container.innerHTML = '';
+                
+                // Фильтруем по имени
+                const filteredFriends = friendsList.filter(friend => 
+                    friend.name.toLowerCase().includes(filter.toLowerCase())
+                );
+                
+                if (filteredFriends.length === 0) {
+                    container.innerHTML = '<div class="no-data">Нет друзей</div>';
+                    return;
+                }
+                
+                filteredFriends.forEach(friend => {
+                    const friendDiv = document.createElement('div');
+                    friendDiv.className = 'user-item';
+                    friendDiv.onclick = () => openChat({
+                        id: friend.id,
+                        name: friend.name,
+                        type: 'private',  
+                        chat_id: friend.chat_id
+                    });
+                    
+                    friendDiv.innerHTML = `
+                        <div class="user-avatar"></div>
+                        <span class="user-name">${friend.name}</span>
+                    `;
+                    container.appendChild(friendDiv);
                 });
                 
-                friendDiv.innerHTML = `
-                    <div class="user-avatar"></div>
-                    <span class="user-name">${friend.username}</span>
-                `;
-                container.appendChild(friendDiv);
-            });
+            } catch (error) {
+                console.error('Ошибка загрузки друзей:', error);
+                container.innerHTML = '<div class="error">Ошибка загрузки</div>';
+            }
         }
 
-        //отображение запросов в друзья //пока отображает группы
-            function displayFriendRequests(filter = '') {
-                const container = document.getElementById('chatsList');
+        // Отображение запросов с фильтром
+        async function displayFriendRequests(filter = '') {
+            const container = document.getElementById('chatsList');
+            container.innerHTML = '<div class="loading">Загрузка...</div>';
+            
+            try {
+                const fr_requests = await eel.chek_for_friends_requests()();  
+                
                 container.innerHTML = '';
-
-                let filteredFriendRequests = data.filter(f => f.type === 'group');
-
-                filteredFriendRequests.forEach(data => {
+                
+                // Фильтруем по имени отправителя
+                const filteredRequests = fr_requests.filter(req => 
+                    req.friend_name.toLowerCase().includes(filter.toLowerCase())
+                );
+                
+                if (filteredRequests.length === 0) {
+                    container.innerHTML = '<div class="no-data">Нет заявок</div>';
+                    return;
+                }
+                
+                filteredRequests.forEach(data => {
                     const friendreqDiv = document.createElement('div');
-                    document.getElementById('sendmessage');
                     friendreqDiv.className = 'user-item';
-                    friendreqDiv.onclick = (sendMessage) => openChat(data);
+                    friendreqDiv.onclick = () => accept_friend_request(data);
                     friendreqDiv.innerHTML = `
                         <div class="user-avatar"></div>
-                        <span class="user-name">${data.title}</span>
+                        <span class="user-name">${data.friend_name}</span>
+                        <button class="accept-btn">✓</button>
                     `;
                     container.appendChild(friendreqDiv);
                 });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки заявок:', error);
+                container.innerHTML = '<div class="error">Ошибка загрузки</div>';
             }
+        }
+
+        async function accept_friend_request(data) {
+            await eel.accept_friend_request(data.id)();
+        }
 
 //отображение групп
 //            function displayGroups(filter = '') {
@@ -203,25 +245,45 @@
 //                });
 //            }
 
-        function displayChats(filter = '') {
+        // Отображение чатов с фильтром
+        async function displayChats(filter = '') {
             const container = document.getElementById('chatsList');
-            container.innerHTML = '';
-
-            data
-                .filter(u => u.title.toLowerCase().includes(filter.toLowerCase()))
-                .forEach(user => {
+            container.innerHTML = '<div class="loading">Загрузка...</div>';
+            
+            try {
+                const chats = await eel.select_chats()();  
+                data = chats;
+                
+                container.innerHTML = '';
+                
+                // Фильтруем по названию чата
+                const filteredChats = chats.filter(chat => 
+                    chat.name.toLowerCase().includes(filter.toLowerCase())
+                );
+                
+                if (filteredChats.length === 0) {
+                    container.innerHTML = '<div class="no-data">Нет чатов</div>';
+                    return;
+                }
+                
+                filteredChats.forEach(chat => {
                     const div = document.createElement('div');
                     div.className = 'user-item';
-                    div.onclick = (sendMessage) => openChat(user);
+                    div.onclick = () => openChat(chat);
 
                     div.innerHTML = `
                         <div class="user-avatar"></div>
-                        <span class="user-name">${user.title}</span>
+                        <span class="user-name">${chat.name}</span>
                     `;
 
                     container.appendChild(div);
                 });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки чатов:', error);
+                container.innerHTML = '<div class="error">Ошибка загрузки</div>';
             }
+        }
 
         function switchTab(tab) {
             console.log('perem', switchTab);
@@ -254,28 +316,41 @@
         }
         
         // Поиск
-        function searchUsers() {
-            const filter = document.getElementById('searchInput').value;
-            const friendsTab = document.getElementById('friendsTab');
-            const chatsList = document.getElementById('chatsList');
-            friendsTab.classList.remove('active');
-            chatsTab.classList.remove('active');
+    function searchUsers() {
+        const filter = document.getElementById('searchInput').value;
+        const chatsTab = document.getElementById('chatsTab');
+        const friendsTab = document.getElementById('friendsTab');
+        const friendreqtab = document.getElementById('friendreqtab');
+        
+        // Определяем, какая вкладка активна
+        if (chatsTab.classList.contains('active')) {
             displayChats(filter);
+        } else if (friendsTab.classList.contains('active')) {
+            displayFriends(filter);
+        } else if (friendreqtab.classList.contains('active')) {
+            displayFriendRequests(filter);
         }
+    }
 
-        const messageInput = document.getElementById('messageInput');
 
-        messageInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
+
 
         function set_user_name(data) {
             const username = data.user.username;
+            usr_email = data.user.email;
             currentUser = username;
             document.getElementById('user#id').textContent = username;
+        }
+
+        function start_main_page(){
+            const messageInput = document.getElementById('messageInput');
+
+            messageInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
         }
         
         

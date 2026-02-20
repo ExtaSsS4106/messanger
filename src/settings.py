@@ -1,1 +1,1 @@
-HOST="http://localhost:8000"
+HOST="http://localhost:8000/api_desctop/"

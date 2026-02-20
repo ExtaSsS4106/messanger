@@ -1,13 +1,13 @@
 
     <div class="panel-control" >
-        <div class="user-header" id="user#id">User#228</div>
+        <div class="user-header" id="user#id"></div>
         
         <input type="text" class="search-input" id="searchInput" placeholder="Поиск..." onkeyup="searchUsers()">
         
         <div class="tabs">
             <div class="tab" onclick="switchTab('chats')" id="chatsTab">Чаты</div>
             <div class="tab" onclick="switchTab('friends')" id="friendsTab">Друзья</div>
-            <div class="tab" onclick="switchTab('friends_request')" id="friendreqtab">Группы</div>
+            <div class="tab" onclick="switchTab('friends_request')" id="friendreqtab">Запросы в друзья</div>
         </div>
 
         <div id="chatsList" class="chatsList">
@@ -15,8 +15,8 @@
         </div>
         
         <div class="action-buttons">
-            <button class="action-btn green" onclick="window.location.href='create-channel.html'">Создать канал</button>
-            <button class="action-btn gray" onclick="window.location.href='add-friend.html'">Добавить в друзья</button>
+            <button class="action-btn green" onclick="window.onload = loadPage('createChannel');">Создать канал</button>
+            <button class="action-btn gray" onclick="window.onload = loadPage('addFriends');">Добавить в друзья</button>
         </div>
     </div>
 

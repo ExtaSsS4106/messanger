@@ -4,8 +4,10 @@ console.log("views.js inited")
 
 async function loadPage(value) {
     let content;
+    let data;
     switch(value) {
         case "homepage":
+            console.log("homepage")
             content = await eel.start_page()();
             document.querySelector('body').innerHTML = content;
             break;
@@ -22,10 +24,19 @@ async function loadPage(value) {
             RegPage.init_page();
             break;
         case "main":
-            const [content, data] = await eel.main()(); 
+            [content, data] = await eel.main()(); 
             document.querySelector('body').innerHTML = content;
             set_user_name(data)
+            start_main_page();
             displayChats();
+            break;
+        case "createChannel":
+            content= await eel.create_channel()(); 
+            document.querySelector('body').innerHTML = content;
+            break;
+        case "addFriends":
+            content= await eel.add_friends()(); 
+            document.querySelector('body').innerHTML = content;
             break;
         default:
             console.log("nothing to show");
