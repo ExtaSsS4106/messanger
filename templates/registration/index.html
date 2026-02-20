@@ -1,22 +1,102 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-
-    <title>Месседжер</title>
-
+<html lang="ru">
 <head>
-
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-    <h1 class="titlehead">Месседжер</h1>
-
-    <button class="regbtn" onclick="window.location.href='/sign-up'">Регистрация</button>
-
-    <button class="logbtn" onclick="window.location.href='/home'">Войти</button>
-
-    
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Месседжер</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #555;  /* Серый фон как на скриншоте */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: #666;  /* Темно-серый контейнер */
+            border-radius: 8px;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .titlehead {
+            color: #0f0;  /* Зеленый цвет как на кнопках */
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .regbtn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: normal;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: #777;  /* Серая кнопка */
+            color: #fff;
+        }
+        
+        .regbtn:hover {
+            background: #888;
+        }
+        
+        .logbtn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: normal;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: #0f0;  /* Зеленая кнопка как на скриншоте */
+            color: #000;
+        }
+        
+        .logbtn:hover {
+            background: #0c0;
+        }
+        
+        .ip-address {
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+            border-top: 1px solid #777;
+            padding-top: 15px;
+        }
+    </style>
 </head>
-
+<body>
+    <div class="container">
+        <h1 class="titlehead">Месседжер</h1>
+        
+        <button class="regbtn" onclick="window.location.href='/sign-up'">Регистрация</button>
+        <button class="logbtn" onclick="window.location.href='/home'">Войти</button>
+        
+        <div class="ip-address">
+            127.0.0.1
+        </div>
+    </div>
+</body>
 </html>

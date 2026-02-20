@@ -1,116 +1,474 @@
 <!DOCTYPE html>
-<html>
-
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JSFiddle s1cejLpk</title>
-
-  <style>
-    header{
-  /* Rectangle 1 */
-
-  width: 100%;
-  height: 60px;
-  left: 6px;
-  top: 4px;
-
-  background: #D9D9D9;
-  border-radius: 10px;
-
-  display: grid;
-
-  grid-template-columns: 50% 50%;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messenger</title>
+<style>
+/* --- Основные стили --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #555;
+    color: #fff;
+}
+.container {
+    display: flex;
+    height: 100vh;
 }
 
-._right_side {
-  height: 100%; 
-  display: grid;
-  grid-template-columns: 60% 40%;
+/* --- Левая панель --- */
+.left-panel {
+    width: 300px;
+    background: #666;
+    display: flex;
+    flex-direction: column;
+}
+.search-box {
+    padding: 10px;
+}
+.search-box input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+.tab {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-bottom: 2px solid transparent;
+}
+.tab.active {
+    border-bottom: 2px solid #0f0;
+    color: #0f0;
+}
+.user-list {
+    flex: 1;
+    overflow-y: auto;
+}
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 4px;
+    background: #777;
+}
+.user-item:hover {
+    background: #888;
+}
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #0f0;
+    margin-right: 10px;
 }
 
-
-.-L-right{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  padding-right: 10px;
+/* --- Кнопки --- */
+.actions {
+    display: flex;
+    margin: 10px;
+    gap: 10px;
+}
+.actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.actions button.green {
+    background: #0f0;
+    color: #000;
+}
+.actions button.gray {
+    background: #888;
+    color: #fff;
+}
+.actions a {
+    flex: 1;
+    text-decoration: none;
+}
+.actions a button {
+    width: 100%;
 }
 
-
-.-usrnm{
-  display: flex;
-
-  height: 70%;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
+/* --- Правая панель --- */
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #555;
 }
-
-.User_name {
-  top: 10px;
-  font-family: 'Courier New', Courier, monospace;
-  color: #535353;
-    
-  width: 134px;
-  height: 20px;
-
-
-  background: #FFFDFD;
-  border-radius: 10px;
-
-  text-align: center;
-  line-height: 20px;
-
-
+.chat-header {
+    padding: 10px;
+    background: #666;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-
-
-
-
-.avatar{
-  /* Ellipse 1 */
-  width: 54px;
-  height: 54px;
-
-  border-radius: 30px;
-  background: #FFFFFF;
-
+.messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
-
-  </style>
-
-  
+.message-left, .message-right {
+    max-width: 60%;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+.message-left {
+    background: #444;
+    align-self: flex-start;
+}
+.message-right {
+    background: #0f0;
+    color: #000;
+    align-self: flex-end;
+}
+.input-area {
+    display: flex;
+    padding: 10px;
+    background: #666;
+}
+.input-area input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+.input-area button {
+    margin-left: 5px;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: none;
+    background: #0f0;
+    color: #000;
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
-  <header>
 
-  <div class="_left_side"></div>
-  <div class="_right_side">
-    <div class="-L-left"></div>
-    <div class="-L-right">
-      <div class="-usrnm">
-        <div class="User_name">{{user.username}}</div>
-        
-      </div>
-      <div class="avatar"></div>
+<div class="container">
+    <div class="left-panel">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск..." onkeyup="searchUsers()">
+        </div>
+        <div class="tabs">
+            <div class="tab active" id="chatsTab" onclick="switchTab('chats')">Чаты</div>
+            <div class="tab" id="friendsTab" onclick="switchTab('friends')">Друзья</div>
+            <div class="tab" id="requestsTab" onclick="switchTab('requests')">Запросы</div>
+        </div>
+        <div class="user-list" id="userList"></div>
+        <div class="actions">
+            <a href="{% url 'create_group_chat' %}" style="flex: 1; text-decoration: none;">
+                <button class="green">Создать канал</button>
+            </a>
+            <a href="{% url 'add_friend' %}" style="flex: 1; text-decoration: none;">
+                <button class="gray">Добавить в друзья</button>
+            </a>
+        </div>
     </div>
-  </div>
 
-</header>
-<section>
+    <div class="right-panel">
+        <div class="chat-header" id="chatUserName">Выберите чат</div>
+        <div class="messages" id="messagesContainer"></div>
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Сообщение" onkeypress="checkEnter(event)">
+            <button onclick="sendMessage()">→</button>
+        </div>
+    </div>
+</div>
 
+<script>
+const currentUser = '{{ request.user.username }}';
+let activeChatId = null;
+let activeChatName = '';
+let refreshInterval = null;
 
-</section>
-
-  <script>
+function renderMessages() {
+    const container = document.getElementById('messagesContainer');
+    container.innerHTML = '';
+    if (!activeChatId) return;
     
-  </script>
+    fetch(`/api/chats/${activeChatId}/messages/`)
+        .then(response => response.json())
+        .then(messages => {
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = msg.user_id === {{ request.user.id }} ? 'message-right' : 'message-left';
+                
+                if (msg.user_id !== {{ request.user.id }}) {
+                    const nameDiv = document.createElement('div');
+                    nameDiv.style.fontSize = '11px';
+                    nameDiv.style.fontWeight = 'bold';
+                    nameDiv.style.marginBottom = '3px';
+                    nameDiv.style.color = '#aaa';
+                    nameDiv.innerText = msg.username;
+                    div.appendChild(nameDiv);
+                }
+                
+                const textDiv = document.createElement('div');
+                textDiv.innerText = msg.text;
+                div.appendChild(textDiv);
+                
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        });
+}
+
+function loadChats() {
+    fetch('/api/chats/')
+        .then(response => response.json())
+        .then(chats => {
+            const container = document.getElementById('userList');
+            container.innerHTML = '';
+            
+            chats.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.onclick = () => openChat(chat);
+                div.innerHTML = `
+                    <div class="user-avatar"></div>
+                    <div style="flex: 1">
+                        <div>${chat.chat_name}</div>
+                        ${chat.last_message ? 
+                            `<div style="font-size: 12px; color: #ccc;">
+                                ${chat.last_message.username}: ${chat.last_message.text}
+                            </div>` : 
+                            '<div style="font-size: 12px; color: #ccc;">Нет сообщений</div>'}
+                    </div>
+                    ${chat.unread_count > 0 ? 
+                        `<div style="background: #0f0; color: #000; border-radius: 50%; 
+                            width: 20px; height: 20px; display: flex; align-items: center; 
+                            justify-content: center; font-size: 12px;">
+                            ${chat.unread_count}
+                        </div>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        });
+}
+
+function loadFriends() {
+    fetch('/api/friends/')
+        .then(response => response.json())
+        .then(friends => {
+            const container = document.getElementById('userList');
+            container.innerHTML = '';
+            
+            friends.forEach(friend => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.onclick = () => openPrivateChat(friend.id, friend.username);
+                div.innerHTML = `
+                    <div class="user-avatar"></div>
+                    <span>${friend.username}</span>
+                `;
+                container.appendChild(div);
+            });
+        });
+}
+
+function loadFriendRequests() {
+    fetch('/api/friend-requests/')
+        .then(response => response.json())
+        .then(requests => {
+            const container = document.getElementById('userList');
+            container.innerHTML = '';
+            
+            requests.forEach(req => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `
+                    <div class="user-avatar"></div>
+                    <div style="flex: 1">
+                        <div>${req.sender_info.username}</div>
+                        <div style="font-size: 12px; color: #ccc;">Хочет добавить вас в друзья</div>
+                    </div>
+                    <button onclick="acceptRequest(${req.id})" 
+                        style="background: #0f0; border: none; border-radius: 4px; padding: 5px; cursor: pointer;">
+                        ✓
+                    </button>
+                    <button onclick="rejectRequest(${req.id})" 
+                        style="background: #f00; border: none; border-radius: 4px; padding: 5px; cursor: pointer; margin-left: 5px;">
+                        ✗
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        });
+}
+
+function openChat(chat) {
+    activeChatId = chat.id;
+    activeChatName = chat.chat_name;
+    document.getElementById('chatUserName').innerText = chat.chat_name;
+    renderMessages();
+}
+
+function openPrivateChat(userId, username) {
+    window.location.href = `/private_chat/${userId}/`;
+}
+
+function acceptRequest(requestId) {
+    fetch(`/friend-request/accept/${requestId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    }).then(() => {
+        switchTab('friends');
+    });
+}
+
+function rejectRequest(requestId) {
+    fetch(`/friend-request/decline/${requestId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    }).then(() => {
+        switchTab('requests');
+    });
+}
+
+function switchTab(tab) {
+    document.getElementById('chatsTab').classList.remove('active');
+    document.getElementById('friendsTab').classList.remove('active');
+    document.getElementById('requestsTab').classList.remove('active');
+    document.getElementById(tab + 'Tab').classList.add('active');
+    
+    if (tab === 'chats') {
+        loadChats();
+    } else if (tab === 'friends') {
+        loadFriends();
+    } else if (tab === 'requests') {
+        loadFriendRequests();
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const text = input.value.trim();
+    
+    if (!text || !activeChatId) return;
+    
+    fetch(`/api/chats/${activeChatId}/send/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({text: text})
+    })
+    .then(response => response.json())
+    .then(() => {
+        input.value = '';
+        renderMessages();
+        loadChats();
+    });
+}
+
+function checkEnter(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function searchUsers() {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query.length < 2) {
+        switchTab('chats');
+        return;
+    }
+    
+    fetch(`/api/users/search/?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(users => {
+            const container = document.getElementById('userList');
+            container.innerHTML = '';
+            
+            users.forEach(user => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `
+                    <div class="user-avatar"></div>
+                    <div style="flex: 1">
+                        <div>${user.username}</div>
+                        <div style="font-size: 12px; color: #ccc;">
+                            ${user.first_name} ${user.last_name}
+                        </div>
+                    </div>
+                    ${!user.is_friend && !user.has_pending_request ? 
+                        `<button onclick="sendFriendRequest(${user.id})" 
+                            style="background: #0f0; border: none; border-radius: 4px; padding: 5px; cursor: pointer;">
+                            Добавить
+                        </button>` : 
+                        user.has_pending_request ? 
+                            '<span style="color: #ff0;">Запрос отправлен</span>' : 
+                            '<span style="color: #0f0;">В друзьях</span>'}
+                `;
+                container.appendChild(div);
+            });
+        });
+}
+
+function sendFriendRequest(userId) {
+    fetch('/api/friend-requests/send/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({receiver_id: userId})
+    }).then(() => {
+        searchUsers();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadChats();
+    
+    refreshInterval = setInterval(function() {
+        if (activeChatId) {
+            renderMessages();
+        }
+        loadChats();
+    }, 3000);
+});
+</script>
+
 </body>
 </html>

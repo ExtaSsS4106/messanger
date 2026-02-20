@@ -42,28 +42,20 @@ INSTALLED_APPS = [
     'api_desctop',
     'main_app',
     
-    'crispy_forms',
-    
+    'crispy_forms',    
     'rest_framework',
-    'rest_framework.authtoken',  # для токенов
-    'corsheaders',  # если десктоп на другом порту
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
-
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-LOGIN_REDIRECT_URL = '' # <---- ДОБАВИТЬ СТРАНИЦУ ПОСЛЕ РЕГИСТРАЦИИ
-LOGOUT_REDIRECT_URL = '' # <---- ДОБАВИТЬ СТРАНИЦУ ПОСЛЕ ВЫХОДА
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    
     'corsheaders.middleware.CorsMiddleware',
-    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -92,8 +84,6 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -103,8 +93,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -122,22 +110,25 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'ru-ru'  # меняем на русский
+TIME_ZONE = 'Europe/Moscow'  # меняем на московское время
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# Static files
 STATIC_URL = 'static/'
 
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Login/Logout URLs
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = '/'
+
+# CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
@@ -145,25 +136,18 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-LOGIN_URL = '/login/'  # или оставьте 'accounts/login/' по умолчанию
-LOGIN_REDIRECT_URL = '/home'  # куда перенаправлять после логина
-LOGOUT_REDIRECT_URL = '/'  # куда перенаправлять после логаута
-
-
-
-# DRF настройки
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # для веба
-        'rest_framework.authentication.TokenAuthentication',    # для десктопа
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
 }
 
-# CORS для десктопного приложения
-CORS_ALLOW_ALL_ORIGINS = True  # Для разработки, в production укажите конкретные адреса
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760

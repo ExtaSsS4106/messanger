@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* ===== ОСНОВНЫЕ СТИЛИ ===== */
+body {
+    background-color: #2E2E3E;
+    font-family: 'Roboto', Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    color: #fff;
+}
+
+/* Заголовок */
+.titlehead {
+    text-align: center;
+    font-family: "Amatic SC", cursive;
+    color: #61FF41;
+    font-size: 80px;
+    margin-top: 50px;
+}
+
+/* Кнопки */
+.regbtn, .logbtn, .reglogbtn, .action-btn {
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.regbtn {
+    background-color: #61FF41;
+    color: #1A1A1A;
+    font-size: 28px;
+}
+.regbtn:hover { background-color: #49cc35; }
+
+.logbtn {
+    background-color: #7E7E7E;
+    color: #fff;
+    font-size: 24px;
+}
+.logbtn:hover { background-color: #636363; }
+
+.reglogbtn {
+    background-color: #1cbc11;
+    color: #fff;
+    font-size: 22px;
+}
+.reglogbtn:hover { background-color: #14a20a; }
+
+.action-btn.green {
+    background-color: #61FF41;
+    color: #1A1A1A;
+}
+.action-btn.green:hover { background-color: #49cc35; }
+
+.action-btn.gray {
+    background-color: #7E7E7E;
+    color: #fff;
+}
+.action-btn.gray:hover { background-color: #636363; }
+
+/* ===== Мессенджер ===== */
+.panel-control {
+    width: 22%;
+    height: 90vh;
+    padding: 20px;
+    background-color: #3A3A4A;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.user-header {
+    font-size: 28px;
+    text-align: center;
+    color: #61FF41;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    background-color: #505060;
+    color: #fff;
+}
+.search-input::placeholder { color: #ccc; }
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.tab {
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #505060;
+    transition: all 0.3s;
+}
+.tab.active, .tab:hover {
+    background-color: #61FF41;
+    color: #1A1A1A;
+}
+
+/* Чаты в списке */
+.chatsList {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.chat-item {
+    padding: 10px 15px;
+    border-radius: 12px;
+    background-color: #505060;
+    transition: all 0.2s;
+}
+.chat-item:hover { background-color: #636373; }
+.chat-item a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Мессенджер чат */
+.messenger-chat {
+    flex-grow: 1;
+    width: 78%;
+    height: 90vh;
+    padding: 20px;
+    background-color: #3A3A4A;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #2E2E3E;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-left, .message-right {
+    padding: 12px 18px;
+    border-radius: 18px;
+    max-width: 45%;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.3;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.message-left {
+    background-color: #505060;
+    color: #fff;
+    align-self: flex-start;
+}
+
+.message-right {
+    background-color: #61FF41;
+    color: #1A1A1A;
+    align-self: flex-end;
+}
+
+/* Input для сообщений */
+.message-input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.message-field {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border-radius: 15px;
+    border: none;
+    font-size: 15px;
+    background-color: #505060;
+    color: #fff;
+}
+.send-btn {
+    padding: 12px 18px;
+    border-radius: 15px;
+    border: none;
+    font-weight: 500;
+    background-color: #61FF41;
+    color: #1A1A1A;
+    cursor: pointer;
+}
+.send-btn:hover { background-color: #49cc35; }
+
+/* Контекстное меню */
+.context-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #505060;
+    border-radius: 12px;
+    padding: 10px 0;
+    width: 180px;
+    display: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.context-menu.show { display: block; }
+.menu-item {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 500;
+}
+.menu-item:hover { background-color: #3A3A50; }
+.menu-item.danger { color: #ff6b6b; }
+
+/* Добавление друзей / создание канала */
+.user-card, .friends-list {
+    background-color: #505060;
+    border-radius: 15px;
+    padding: 20px;
+}
+.friend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #3A3A50;
+}
+.friend-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #61FF41;
+}
+
+/* Scrollbar стиль */
+.messages::-webkit-scrollbar, .chatsList::-webkit-scrollbar {
+    width: 8px;
+}
+.messages::-webkit-scrollbar-thumb, .chatsList::-webkit-scrollbar-thumb {
+    background-color: #61FF41;
+    border-radius: 5px;
+}
+.messages::-webkit-scrollbar-track, .chatsList::-webkit-scrollbar-track {
+    background-color: #2E2E3E;
+}
