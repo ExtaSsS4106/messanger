@@ -11,5 +11,5 @@ urlpatterns = [
     path('select_friends', views.select_friends),
     path('get_messages', views.get_messages),
     path('send_message', views.send_message),
- 
+    path('select_chats', views.select_chats),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
