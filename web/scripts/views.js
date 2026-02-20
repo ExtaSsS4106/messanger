@@ -22,8 +22,9 @@ async function loadPage(value) {
             RegPage.init_page();
             break;
         case "main":
-            content = await eel.main()();
+            const [content, data] = await eel.main()(); 
             document.querySelector('body').innerHTML = content;
+            set_user_name(data)
             displayChats();
             break;
         default:

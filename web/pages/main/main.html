@@ -1,18 +1,18 @@
 
-    <div class="panel-control">
-        <div class="user-header">User#228</div>
+    <div class="panel-control" >
+        <div class="user-header" id="user#id">User#228</div>
         
         <input type="text" class="search-input" id="searchInput" placeholder="Поиск..." onkeyup="searchUsers()">
         
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('chats')" id="chatsTab">Чаты</div>
+            <div class="tab" onclick="switchTab('chats')" id="chatsTab">Чаты</div>
             <div class="tab" onclick="switchTab('friends')" id="friendsTab">Друзья</div>
+            <div class="tab" onclick="switchTab('friends_request')" id="friendreqtab">Группы</div>
         </div>
-        
+
         <div id="chatsList" class="chatsList">
             <!-- Чаты загружаются через JS -->
         </div>
-        
         
         <div class="action-buttons">
             <button class="action-btn green" onclick="window.location.href='create-channel.html'">Создать канал</button>
@@ -20,21 +20,14 @@
         </div>
     </div>
 
-
     <div class="messenger-chat">
         <div class="chat-header">
-            <a href="chats.html" class="back-btn">←</a>
+
+            <div class="user-avatar" id="chatUserAvatar"></div>
             <div class="chat-title" id="chatUserName">User#1234</div>
-            <button class="menu-btn" id="menuBtn">⋮</button>
-            
-            <div class="context-menu" id="contextMenu">
-                <button class="menu-item" onclick="addFriend()">Добавить в друзья</button>
-                <button class="menu-item" onclick="removeFriend()">Удалить из друзей</button>
-                <button class="menu-item" onclick="deleteChat()">Удалить чат</button>
-                <div class="menu-divider"></div>
-                <button class="menu-item" onclick="copyLink()">Скопировать ссылку</button>
-                <button class="menu-item danger" onclick="leaveChannel()">Выйти из канала</button>
-            </div>
+            <button class="menu-btn" id="menuBtn" onclick="threemenuBtn(activeChatId)">⋮</button>
+            <div class="context-menu" id="contextMenu"></div>
+            <!-- Контекст меню в js -->
         </div>
         
         <div class="messages" id="messagesContainer">
@@ -46,4 +39,6 @@
             <button class="send-btn" onclick="sendMessage()">→</button>
         </div>
     </div>
-    <script src="../scripts/main.js"></script>
+    
+
+

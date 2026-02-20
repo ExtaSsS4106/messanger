@@ -5,7 +5,9 @@ from .render import render
 
 class Views:
 
-    
+    """                        data=json.dumps({ 
+                        "token": data['token'],
+                    }),"""
     @eel.expose
     def GET_HOST():
         return HOST
@@ -16,7 +18,60 @@ class Views:
     
     @eel.expose
     def main():
-        return render("web/pages/main/main.html")
+        with open('data.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+            print(data)
+        return render("web/pages/main/main.html", data)
+    
+    @eel.expose
+    def select_friends():
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+            
+            response = requests.get(
+                url=f"{HOST}/api/select_friends",
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Token {data["token"]}'
+                }
+            )
+            
+            if response.status_code == 200:
+                response_data = response.json()
+                return response_data.get('friends_list', [])
+            else:
+                return render(data={'error': True, 'message': f'Ошибка {response.status_code}'})
+                
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            return render(data={'error': True, 'message': str(e)})
+        
+    @eel.expose
+    def get_messages(chat_id):
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+            
+            response = requests.post(
+                url=f"{HOST}/api/get_messages",
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Token {data["token"]}'
+                },
+                data=json.dumps({
+                    "chat_id": chat_id,
+                })
+            )
+            
+            response_data = response.json()
+            print(response_data.get('messages', []))
+            return response_data.get('messages', [])
+
+                
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            return render(data={'error': True, 'message': str(e)})
     
     @eel.expose
     def login(username=None, passwd=None):
