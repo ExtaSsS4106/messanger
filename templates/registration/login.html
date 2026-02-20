@@ -1,42 +1,487 @@
 {% extends "registration/form.html" %}
-{% block title %}Вход{% endblock %} 
+{% load static %}
+{% block title %}Вход - Месседжер{% endblock %}
 
 {% block content %}
-<form class="form" method="post">
-  {% csrf_token %}
-    <h1 class="titlereglog">Вход</h1>
-       <input class="input" 
-             name="username" 
-             placeholder="Имя пользователя" 
-             type="text" 
-             value="{{ form.username.value|default:'' }}"
-             required>
-      {% if form.username.errors %}
-        <p class="error">{{ form.username.errors.0 }}</p>
-      {% endif %}
-      
-      <input class="input" 
-             name="password" 
-             type="password" 
-             placeholder="Пароль" 
-             required>
-      {% if form.password.errors %}
-        <p class="error">{{ form.password.errors.0 }}</p>
-      {% endif %}
-      
-      {% if form.non_field_errors %}
-        <p class="error" id="loginError">
-          Неверное имя пользователя или пароль
-        </p>
-      {% endif %}
-      
-      <button class="reglogbtn" type="submit" id="doLoginBtn">
-        <i class="fas fa-sign-in-alt"></i> Войти
-      </button>
-      
-      <button type="button" id="backFromLogin" class="secondary" onclick="window.location.href='/'">
-        <i class="fas fa-arrow-left"></i> Назад
-      </button>
-  
-</form>
+<div class="login-container">
+    <div class="login-card">
+        <!-- Заголовок -->
+        <div class="card-header">
+            <div class="logo">Месседжер</div>
+            <h1 class="title">Добро пожаловать!</h1>
+            <p class="subtitle">Войдите в свой аккаунт</p>
+        </div>
+        
+        <!-- Форма -->
+        <form class="login-form" method="post">
+            {% csrf_token %}
+            
+            <!-- Имя пользователя -->
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i>
+                    Имя пользователя
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           id="username"
+                           name="username" 
+                           placeholder="Введите ваш никнейм" 
+                           type="text" 
+                           value="{{ form.username.value|default:'' }}"
+                           required
+                           autofocus>
+                </div>
+                {% if form.username.errors %}
+                    <p class="error-message">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Пароль -->
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Пароль
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           id="password"
+                           name="password" 
+                           type="password" 
+                           placeholder="Введите пароль" 
+                           required>
+                </div>
+                {% if form.password.errors %}
+                    <p class="error-message">{{ form.password.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Ошибка входа -->
+            {% if form.non_field_errors %}
+                <div class="error-box">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Неверное имя пользователя или пароль</span>
+                </div>
+            {% endif %}
+            
+            <!-- Дополнительные опции -->
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember" class="checkbox">
+                    <span>Запомнить меня</span>
+                </label>
+                <a href="#" class="forgot-link">Забыли пароль?</a>
+            </div>
+            
+            <!-- Кнопки -->
+            <div class="form-actions">
+                <button class="btn-primary" type="submit" id="doLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </button>
+                
+                <button type="button" class="btn-secondary" onclick="window.location.href='/'">
+                    <i class="fas fa-arrow-left"></i>
+                    Назад
+                </button>
+            </div>
+            
+            <!-- Ссылка на регистрацию -->
+            <div class="register-link">
+                <span>Нет аккаунта?</span>
+                <a href="{% url 'sign_up' %}">Зарегистрироваться</a>
+            </div>
+        </form>
+        
+        <!-- IP адрес -->
+        <div class="ip-address">
+            127.0.0.1
+        </div>
+    </div>
+</div>
+
+<style>
+/* Основные стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #555;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #666;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Заголовок */
+.card-header {
+    background: #555;
+    padding: 30px 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid #777;
+}
+
+.logo {
+    color: #0f0;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+}
+
+.title {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Форма */
+.login-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+label i {
+    color: #0f0;
+    font-size: 16px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #777;
+    border: 2px solid #888;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #0f0;
+    background: #6a6a6a;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+.form-input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Ошибки */
+.error-message {
+    background: #ff4444;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 8px;
+    animation: shake 0.3s ease;
+}
+
+.error-box {
+    background: #ff4444;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    animation: shake 0.3s ease;
+}
+
+.error-box i {
+    font-size: 18px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Опции формы */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 5px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ccc;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #0f0;
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: #0f0;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: #0c0;
+    text-decoration: underline;
+}
+
+/* Кнопки */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin: 30px 0 20px;
+}
+
+.btn-primary, .btn-secondary {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #0f0;
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #0c0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 0, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    background: #888;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #777;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #888;
+}
+
+/* Ссылка на регистрацию */
+.register-link {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #777;
+}
+
+.register-link span {
+    color: #aaa;
+    margin-right: 5px;
+}
+
+.register-link a {
+    color: #0f0;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.register-link a:hover {
+    color: #0c0;
+    text-decoration: underline;
+}
+
+/* IP адрес */
+.ip-address {
+    text-align: center;
+    padding: 15px;
+    background: #555;
+    color: #888;
+    font-size: 12px;
+    border-top: 1px solid #777;
+}
+
+/* Анимация загрузки */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #000;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .login-card {
+        max-width: 100%;
+    }
+    
+    .card-header {
+        padding: 25px 20px 15px;
+    }
+    
+    .logo {
+        font-size: 30px;
+    }
+    
+    .title {
+        font-size: 20px;
+    }
+    
+    .login-form {
+        padding: 20px;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.querySelector('.login-form');
+    const submitBtn = document.getElementById('doLoginBtn');
+    
+    // Добавляем анимацию загрузки при отправке формы
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Вход...';
+            
+        });
+    }
+    
+    const errorBox = document.querySelector('.error-box');
+    if (errorBox) {
+        setTimeout(() => {
+            errorBox.style.transition = 'opacity 0.5s';
+            errorBox.style.opacity = '0';
+            setTimeout(() => {
+                if (errorBox.parentNode) {
+                    errorBox.style.display = 'none';
+                }
+            }, 500);
+        }, 5000);
+    }
+    
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    
+    if (usernameInput) {
+        usernameInput.addEventListener('input', function() {
+            this.classList.remove('error-input');
+            const errorMsg = this.parentNode.parentNode.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+        });
+    }
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            this.classList.remove('error-input');
+            const errorBox = document.querySelector('.error-box');
+            if (errorBox) {
+                errorBox.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock %}

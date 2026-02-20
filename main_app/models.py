@@ -2,8 +2,8 @@
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
+import uuid
 
-# ---------- Дружба ----------
 class Friends(models.Model):
     user1 = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='friendships1', on_delete=models.CASCADE
@@ -28,7 +28,6 @@ class Friends(models.Model):
             self.user1, self.user2 = self.user2, self.user1
         super().save(*args, **kwargs)
 
-# ---------- Чаты ----------
 class Chat(models.Model):
     PRIVATE = 'private'
     GROUP = 'group'
@@ -42,7 +41,6 @@ class Chat(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# Связь пользователь–чат
 class UserChat(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
@@ -52,7 +50,6 @@ class UserChat(models.Model):
     class Meta:
         unique_together = ('user', 'chat')
 
-# Сообщения
 class Message(models.Model):
     TEXT = 'text'
     FILE = 'file'
@@ -66,7 +63,6 @@ class Message(models.Model):
     file = models.FileField(upload_to='messages/', blank=True, null=True)
     type = models.CharField(max_length=4, choices=TYPE_CHOICES, default=TEXT)
     
-    # Добавленные поля
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_read = models.BooleanField(default=False)
@@ -88,7 +84,6 @@ class Message(models.Model):
             self.is_read = True
             self.save(update_fields=['is_read'])
 
-# ---------- Заявки в друзья ----------
 class FriendRequest(models.Model):
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="sent_friend_requests", on_delete=models.CASCADE
@@ -113,19 +108,57 @@ class FriendRequest(models.Model):
             return
 
         with transaction.atomic():
-            # Создаём связь дружбы
             Friends.objects.get_or_create(
                 user1=min(self.sender, self.receiver, key=lambda u: u.id),
                 user2=max(self.sender, self.receiver, key=lambda u: u.id),
             )
 
-            # Создаём приватный чат между пользователями
             chat = Chat.objects.create(type=Chat.PRIVATE)
             UserChat.objects.bulk_create([
                 UserChat(user=self.sender, chat=chat),
                 UserChat(user=self.receiver, chat=chat),
             ])
 
-            # Обновляем статус заявки
             self.accepted = True
             self.save(update_fields=["accepted"])
+
+class ChatInvite(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='invites')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_invites')
+    code = models.CharField(max_length=64, unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    max_uses = models.IntegerField(default=0)  # 0 = безлимитно
+    used_count = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code']),
+            models.Index(fields=['chat', 'is_active']),
+        ]
+    
+    def is_valid(self):
+        if not self.is_active:
+            return False
+        if self.expires_at and self.expires_at < timezone.now():
+            return False
+        if self.max_uses > 0 and self.used_count >= self.max_uses:
+            return False
+        return True
+    
+    def use(self):
+        if self.is_valid():
+            self.used_count += 1
+            if self.max_uses > 0 and self.used_count >= self.max_uses:
+                self.is_active = False
+            self.save()
+            return True
+        return False
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('join_chat_by_code', kwargs={'code': self.code})
+    
+    def __str__(self):
+        return f"Invite to {self.chat.name or 'chat'} by {self.creator.username}"

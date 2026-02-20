@@ -1,7 +1,563 @@
-<h2>Создать канал</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать групповой чат - Месседжер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #555;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #666;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        /* Заголовок */
+        .header {
+            background: #555;
+            padding: 20px;
+            border-bottom: 1px solid #777;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-button {
+            background: #777;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .back-button:hover {
+            background: #888;
+        }
+        
+        h1 {
+            color: #0f0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        /* Форма */
+        .form-section {
+            padding: 25px;
+            background: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #777;
+            border: 1px solid #888;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            border-color: #0f0;
+            background: #6a6a6a;
+        }
+        
+        .form-input::placeholder {
+            color: #aaa;
+        }
+        
+        .input-hint {
+            color: #aaa;
+            font-size: 12px;
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+        
+        /* Поиск друзей */
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            background: #777;
+            border: 1px solid #888;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+        
+        .search-box:focus {
+            border-color: #0f0;
+        }
+        
+        /* Список друзей */
+        .friends-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #5a5a5a;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #666;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .friend-item:hover {
+            background: #777;
+            transform: translateX(5px);
+        }
+        
+        .friend-item.selected {
+            background: #4a6a4a;
+            border-color: #0f0;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #0f0;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+        }
+        
+        .friend-username {
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #0f0;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        
+        /* Выбранные участники */
+        .selected-section {
+            background: #5a5a5a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .selected-title {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .selected-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 40px;
+        }
+        
+        .selected-badge {
+            background: #0f0;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remove-badge {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .remove-badge:hover {
+            background: #ff0000;
+        }
+        
+        .empty-selected {
+            color: #888;
+            font-style: italic;
+            padding: 10px 0;
+        }
+        
+        /* Кнопки */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .submit-button {
+            flex: 2;
+            background: #0f0;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .submit-button:hover {
+            background: #0c0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,0,0.3);
+        }
+        
+        .submit-button:disabled {
+            background: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .cancel-button {
+            flex: 1;
+            background: #777;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .cancel-button:hover {
+            background: #888;
+        }
+        
+        /* Ошибки */
+        .error-message {
+            background: #ff4444;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* Скроллбар */
+        .friends-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .friends-list::-webkit-scrollbar-track {
+            background: #555;
+        }
+        
+        .friends-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        .friends-list::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+        
+        /* Анимации */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .friend-item {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <button class="back-button" onclick="goBack()">← Назад</button>
+            <h1>Создать групповой чат</h1>
+        </div>
+        
+        <!-- Форма -->
+        <div class="form-section">
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="post" id="createGroupForm">
+                {% csrf_token %}
+                
+                <!-- Название группы -->
+                <div class="form-group">
+                    <label for="name">Название группы <span style="color: #888;">(необязательно)</span></label>
+                    <input type="text" 
+                           class="form-input" 
+                           id="name" 
+                           name="name" 
+                           placeholder="Например: Рабочие вопросы"
+                           value="{{ form.name.value|default:'' }}">
+                    <div class="input-hint">Если не указать, будет создан чат без названия</div>
+                </div>
+                
+                <!-- Поиск друзей -->
+                <div class="form-group">
+                    <label>Выберите участников</label>
+                    <input type="text" 
+                           class="search-box" 
+                           id="searchFriends" 
+                           placeholder="Поиск друзей..."
+                           oninput="filterFriends()">
+                    
+                    <!-- Список друзей -->
+                    <div class="friends-list" id="friendsList">
+                        {% for friend in friends %}
+                        <div class="friend-item" onclick="toggleFriend({{ friend.id }}, '{{ friend.username }}')" id="friend-{{ friend.id }}">
+                            <div class="friend-avatar">{{ friend.username|first|upper }}</div>
+                            <div class="friend-info">
+                                <div class="friend-name">{{ friend.username }}</div>
+                                {% if friend.first_name or friend.last_name %}
+                                <div class="friend-username">{{ friend.first_name }} {{ friend.last_name }}</div>
+                                {% else %}
+                                <div class="friend-username">@{{ friend.username }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="check-icon" id="check-{{ friend.id }}" style="display: none;">✓</div>
+                        </div>
+                        {% empty %}
+                        <div style="text-align: center; color: #888; padding: 30px;">
+                            <span style="font-size: 40px; display: block; margin-bottom: 10px;">👥</span>
+                            У вас пока нет друзей<br>
+                            <small>Добавьте друзей, чтобы создать групповой чат</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Выбранные участники -->
+                <div class="selected-section">
+                    <div class="selected-title">Выбранные участники:</div>
+                    <div class="selected-badges" id="selectedBadges">
+                        <div class="empty-selected" id="emptySelected">Никто не выбран</div>
+                    </div>
+                </div>
+                
+                <!-- Скрытое поле для отправки ID выбранных друзей -->
+                <input type="hidden" name="users" id="selectedUsersInput" value="">
+                
+                <!-- Кнопки -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button" id="submitBtn" disabled>Создать группу</button>
+                    <button type="button" class="cancel-button" onclick="goBack()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Создать</button>
-</form>
+    <script>
+        // Массив выбранных пользователей
+        let selectedUsers = [];
+        
+        // Функция возврата на главную
+        function goBack() {
+            window.location.href = '/home';
+        }
+        
+        // Поиск друзей
+        function filterFriends() {
+            const query = document.getElementById('searchFriends').value.toLowerCase();
+            const friendItems = document.querySelectorAll('.friend-item');
+            
+            friendItems.forEach(item => {
+                const name = item.querySelector('.friend-name').textContent.toLowerCase();
+                const username = item.querySelector('.friend-username').textContent.toLowerCase();
+                
+                if (name.includes(query) || username.includes(query) || query === '') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Выбор/отмена выбора друга
+        function toggleFriend(userId, username) {
+            const friendItem = document.getElementById(`friend-${userId}`);
+            const checkIcon = document.getElementById(`check-${userId}`);
+            
+            if (selectedUsers.includes(userId)) {
+                // Убираем из выбранных
+                selectedUsers = selectedUsers.filter(id => id !== userId);
+                friendItem.classList.remove('selected');
+                checkIcon.style.display = 'none';
+            } else {
+                // Добавляем в выбранные
+                selectedUsers.push(userId);
+                friendItem.classList.add('selected');
+                checkIcon.style.display = 'flex';
+            }
+            
+            // Обновляем отображение выбранных участников
+            updateSelectedBadges();
+            
+            // Обновляем скрытое поле формы
+            document.getElementById('selectedUsersInput').value = selectedUsers.join(',');
+            
+            // Активируем/деактивируем кнопку отправки
+            document.getElementById('submitBtn').disabled = selectedUsers.length === 0;
+        }
+        
+        // Обновление списка выбранных участников
+        function updateSelectedBadges() {
+            const badgesContainer = document.getElementById('selectedBadges');
+            const emptySelected = document.getElementById('emptySelected');
+            
+            if (selectedUsers.length === 0) {
+                emptySelected.style.display = 'block';
+                badgesContainer.innerHTML = '';
+                badgesContainer.appendChild(emptySelected);
+                return;
+            }
+            
+            emptySelected.style.display = 'none';
+            badgesContainer.innerHTML = '';
+            
+            selectedUsers.forEach(userId => {
+                const friendItem = document.getElementById(`friend-${userId}`);
+                const username = friendItem.querySelector('.friend-name').textContent;
+                
+                const badge = document.createElement('span');
+                badge.className = 'selected-badge';
+                badge.innerHTML = `
+                    ${username}
+                    <span class="remove-badge" onclick="removeFriend(${userId})">✗</span>
+                `;
+                badgesContainer.appendChild(badge);
+            });
+        }
+        
+        // Удаление друга из выбранных
+        function removeFriend(userId) {
+            toggleFriend(userId);
+        }
+        
+        // Валидация формы перед отправкой
+        document.getElementById('createGroupForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (selectedUsers.length === 0) {
+                e.preventDefault();
+                alert('Выберите хотя бы одного участника для создания группы');
+                return;
+            }
+            
+            // Блокируем кнопку чтобы избежать двойной отправки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Создание...';
+        });
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Если есть предупреждение об ошибке, скроллим к нему
+            const errorMsg = document.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Добавляем обработчик Enter в поле поиска
+            document.getElementById('searchFriends').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

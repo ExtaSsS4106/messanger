@@ -1,41 +1,583 @@
 {% extends "registration/form.html" %}
-{% block title %}Sign up{% endblock %}
+{% load static %}
+{% block title %}Регистрация - Месседжер{% endblock %}
 
-    {% block content %}
-    <form class="form" action="" method="post">
-        {% csrf_token %}
+{% block content %}
+<div class="register-container">
+    <div class="register-card">
+        <!-- Заголовок -->
+        <div class="card-header">
+            <div class="logo">Месседжер</div>
+            <h1 class="title">Регистрация</h1>
+            <p class="subtitle">Создайте аккаунт для общения</p>
+        </div>
         
-        <h1 class="titlereglog">Регистрация</h1>
+        <!-- Форма -->
+        <form class="register-form" method="post">
+            {% csrf_token %}
+            
+            <!-- Имя пользователя -->
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i>
+                    Имя пользователя
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           type="text" 
+                           id="username"
+                           name="username" 
+                           placeholder="Придумайте никнейм" 
+                           value="{{ form.username.value|default:'' }}" 
+                           required>
+                </div>
+                {% if form.username.errors %}
+                    <p class="error-message">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           type="email" 
+                           id="email"
+                           name="email" 
+                           placeholder="your@email.com" 
+                           value="{{ form.email.value|default:'' }}" 
+                           required>
+                </div>
+                {% if form.email.errors %}
+                    <p class="error-message">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Пароль -->
+            <div class="form-group">
+                <label for="password1">
+                    <i class="fas fa-lock"></i>
+                    Пароль
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           type="password" 
+                           id="password1"
+                           name="password1" 
+                           placeholder="Минимум 8 символов" 
+                           required>
+                </div>
+                {% if form.password1.errors %}
+                    <p class="error-message">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Требования к паролю -->
+            <div class="password-requirements">
+                <div class="requirements-title">Пароль должен содержать:</div>
+                <ul class="requirements-list">
+                    <li class="requirement" id="req-length">✓ Минимум 8 символов</li>
+                    <li class="requirement" id="req-digit">✓ Хотя бы одну цифру</li>
+                    <li class="requirement" id="req-upper">✓ Хотя бы одну заглавную букву</li>
+                    <li class="requirement" id="req-lower">✓ Хотя бы одну строчную букву</li>
+                </ul>
+            </div>
+            
+            <!-- Подтверждение пароля -->
+            <div class="form-group">
+                <label for="password2">
+                    <i class="fas fa-lock"></i>
+                    Подтверждение пароля
+                </label>
+                <div class="input-wrapper">
+                    <input class="form-input" 
+                           type="password" 
+                           id="password2"
+                           name="password2" 
+                           placeholder="Введите пароль еще раз" 
+                           required>
+                </div>
+                {% if form.password2.errors %}
+                    <p class="error-message">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+                <div class="password-match" id="passwordMatch"></div>
+            </div>
+            
+            {% if form.non_field_errors %}
+                <div class="non-field-errors">
+                    {% for error in form.non_field_errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Кнопки -->
+            <div class="form-actions">
+                <button class="btn-primary" type="submit" id="submitBtn">
+                    <i class="fas fa-user-plus"></i>
+                    Зарегистрироваться
+                </button>
+                
+                <button type="button" class="btn-secondary" onclick="window.location.href='/'">
+                    <i class="fas fa-arrow-left"></i>
+                    Назад
+                </button>
+            </div>
+            
+            <!-- Ссылка на вход -->
+            <div class="login-link">
+                <span>Уже есть аккаунт?</span>
+                <a href="{% url 'login' %}">Войти</a>
+            </div>
+        </form>
+        
+        <!-- IP адрес -->
+        <div class="ip-address">
+            127.0.0.1
+        </div>
+    </div>
+</div>
 
-        <input class="input" type="text" name="username" placeholder="Имя пользователя" value="{{ form.username.value|default:'' }}" required>
-        {% if form.username.errors %}
-            <p class="error">{{ form.username.errors.0 }}</p>
-        {% endif %}
+<style>
+/* Основные стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        <input class="input" type="email" name="email" placeholder="E-mail" value="{{ form.email.value|default:'' }}" required>
-        {% if form.email.errors %}
-            <p class="error">{{ form.email.errors.0 }}</p>
-        {% endif %}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #555;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        <input class="input" type="password" name="password1" placeholder="Пароль" required>
-        {% if form.password1.errors %}
-            <p class="error">{{ form.password1.errors.0 }}</p>
-        {% endif %}
+.register-container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        <input class="input" type="password" name="password2" placeholder="Пароль еще раз" required>
-        {% if form.password2.errors %}
-            <p class="error">{{ form.password2.errors.0 }}</p>
-        {% endif %}
+.register-card {
+    width: 100%;
+    max-width: 450px;
+    background: #666;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: slideIn 0.5s ease;
+}
 
-        {% if form.non_field_errors %}
-            <p class="error">{{ form.non_field_errors.0 }}</p>
-        {% endif %}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        <button class="reglogbtn" type="submit">
-            Регистрация
-        </button>
-        <button type="button" id="backFromLogin" class="secondary" onclick="window.location.href='/'">
-        <i class="fas fa-arrow-left"></i> Назад
-      </button>
-    </form>
-    {% endblock %}
+/* Заголовок */
+.card-header {
+    background: #555;
+    padding: 30px 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid #777;
+}
+
+.logo {
+    color: #0f0;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+}
+
+.title {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Форма */
+.register-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+label i {
+    color: #0f0;
+    font-size: 16px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #777;
+    border: 2px solid #888;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #0f0;
+    background: #6a6a6a;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+.form-input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Требования к паролю */
+.password-requirements {
+    background: #5a5a5a;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0 20px;
+}
+
+.requirements-title {
+    color: #ccc;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.requirements-list {
+    list-style: none;
+}
+
+.requirement {
+    color: #aaa;
+    font-size: 12px;
+    margin: 6px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.requirement::before {
+    content: "•";
+    position: absolute;
+    left: 5px;
+    color: #0f0;
+}
+
+.requirement.valid {
+    color: #0f0;
+}
+
+.requirement.valid::before {
+    content: "✓";
+}
+
+.requirement.invalid {
+    color: #ff6b6b;
+}
+
+.requirement.invalid::before {
+    content: "✗";
+    color: #ff6b6b;
+}
+
+/* Индикатор совпадения паролей */
+.password-match {
+    font-size: 12px;
+    margin-top: 5px;
+    padding-left: 5px;
+    min-height: 20px;
+}
+
+.password-match.match {
+    color: #0f0;
+}
+
+.password-match.not-match {
+    color: #ff6b6b;
+}
+
+/* Ошибки */
+.error-message {
+    background: #ff4444;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 8px;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.non-field-errors {
+    margin-bottom: 20px;
+}
+
+/* Кнопки */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin: 30px 0 20px;
+}
+
+.btn-primary, .btn-secondary {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #0f0;
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #0c0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 0, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    background: #888;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #777;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #888;
+}
+
+/* Ссылка на вход */
+.login-link {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #777;
+}
+
+.login-link span {
+    color: #aaa;
+    margin-right: 5px;
+}
+
+.login-link a {
+    color: #0f0;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.login-link a:hover {
+    color: #0c0;
+    text-decoration: underline;
+}
+
+/* IP адрес */
+.ip-address {
+    text-align: center;
+    padding: 15px;
+    background: #555;
+    color: #888;
+    font-size: 12px;
+    border-top: 1px solid #777;
+}
+
+/* Анимация загрузки */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #000;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const password1 = document.getElementById('password1');
+    const password2 = document.getElementById('password2');
+    const submitBtn = document.getElementById('submitBtn');
+    const matchDiv = document.getElementById('passwordMatch');
+    
+    // Требования к паролю
+    const reqLength = document.getElementById('req-length');
+    const reqDigit = document.getElementById('req-digit');
+    const reqUpper = document.getElementById('req-upper');
+    const reqLower = document.getElementById('req-lower');
+    
+    // Функция проверки пароля
+    function checkPasswordStrength() {
+        const password = password1.value;
+        
+        // Проверка длины
+        if (password.length >= 8) {
+            reqLength.classList.add('valid');
+            reqLength.classList.remove('invalid');
+        } else {
+            reqLength.classList.add('invalid');
+            reqLength.classList.remove('valid');
+        }
+        
+        // Проверка наличия цифры
+        if (/\d/.test(password)) {
+            reqDigit.classList.add('valid');
+            reqDigit.classList.remove('invalid');
+        } else {
+            reqDigit.classList.add('invalid');
+            reqDigit.classList.remove('valid');
+        }
+        
+        // Проверка заглавной буквы
+        if (/[A-Z]/.test(password)) {
+            reqUpper.classList.add('valid');
+            reqUpper.classList.remove('invalid');
+        } else {
+            reqUpper.classList.add('invalid');
+            reqUpper.classList.remove('valid');
+        }
+        
+        // Проверка строчной буквы
+        if (/[a-z]/.test(password)) {
+            reqLower.classList.add('valid');
+            reqLower.classList.remove('invalid');
+        } else {
+            reqLower.classList.add('invalid');
+            reqLower.classList.remove('valid');
+        }
+    }
+    
+    // Функция проверки совпадения паролей
+    function checkPasswordMatch() {
+        if (password2.value.length > 0) {
+            if (password1.value === password2.value) {
+                matchDiv.textContent = '✓ Пароли совпадают';
+                matchDiv.className = 'password-match match';
+            } else {
+                matchDiv.textContent = '✗ Пароли не совпадают';
+                matchDiv.className = 'password-match not-match';
+            }
+        } else {
+            matchDiv.textContent = '';
+        }
+    }
+    
+    // Валидация формы перед отправкой
+    function validateForm() {
+        const password = password1.value;
+        const passwordValid = password.length >= 8 && 
+                             /\d/.test(password) && 
+                             /[A-Z]/.test(password) && 
+                             /[a-z]/.test(password);
+        
+        if (!passwordValid) {
+            alert('Пароль не соответствует требованиям безопасности');
+            return false;
+        }
+        
+        if (password1.value !== password2.value) {
+            alert('Пароли не совпадают');
+            return false;
+        }
+        
+        // Блокируем кнопку и показываем загрузку
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span> Регистрация...';
+        
+        return true;
+    }
+    
+    // Добавляем обработчики событий
+    if (password1) {
+        password1.addEventListener('input', function() {
+            checkPasswordStrength();
+            checkPasswordMatch();
+        });
+    }
+    
+    if (password2) {
+        password2.addEventListener('input', checkPasswordMatch);
+    }
+    
+    // Добавляем валидацию на отправку формы
+    const form = document.querySelector('.register-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
+
+<!-- Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}

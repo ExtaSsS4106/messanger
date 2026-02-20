@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать приглашение - Месседжер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #555;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #666;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #0f0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chat-info {
+            background: #777;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .chat-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #777;
+            border: 1px solid #888;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #0f0;
+        }
+        
+        .hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-green {
+            background: #0f0;
+            color: #000;
+        }
+        
+        .btn-green:hover {
+            background: #0c0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-gray {
+            background: #777;
+            color: #fff;
+        }
+        
+        .btn-gray:hover {
+            background: #888;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .error {
+            background: #ff4444;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Создать приглашение</h1>
+        
+        <div class="chat-info">
+            <div class="chat-name">{{ chat.name|default:'Групповой чат' }}</div>
+            <div style="font-size: 14px; color: #ccc; margin-top: 5px;">
+                ID: {{ chat.id }} • {{ chat.users.count }} участников
+            </div>
+        </div>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Срок действия приглашения</label>
+                <select name="expires_in">
+                    <option value="1">1 час</option>
+                    <option value="6">6 часов</option>
+                    <option value="12">12 часов</option>
+                    <option value="24" selected>24 часа</option>
+                    <option value="72">3 дня</option>
+                    <option value="168">7 дней</option>
+                    <option value="0">Бессрочно</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Максимальное количество использований</label>
+                <select name="max_uses">
+                    <option value="1">1 раз</option>
+                    <option value="5">5 раз</option>
+                    <option value="10">10 раз</option>
+                    <option value="25">25 раз</option>
+                    <option value="50">50 раз</option>
+                    <option value="100">100 раз</option>
+                    <option value="0" selected>Безлимитно</option>
+                </select>
+                <div class="hint">0 = без ограничений</div>
+            </div>
+            
+            <div class="actions">
+                <button type="submit" class="btn btn-green" style="flex: 2;">Создать приглашение</button>
+                <a href="{% url 'chat_detail' chat.id %}" class="btn btn-gray" style="flex: 1; text-align: center;">Отмена</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
