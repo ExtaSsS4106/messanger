@@ -36,8 +36,49 @@ class Views:
     
     
     
-    
-    
+    @eel.expose
+    def send_friend_request(id):
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+            
+            response = requests.post(
+                url=f"{HOST}send_friend_request",
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Token {data["token"]}'
+                },
+                data=json.dumps({
+                    "user_id": id,
+                })
+            )
+            
+
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            return render(data={'error': True, 'message': str(e)})
+        
+    @eel.expose
+    def remove_friend_api(user_id):
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+            
+            response = requests.post(
+                url=f"{HOST}remove_friend_api",
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Token {data["token"]}'
+                },
+                data=json.dumps({
+                    "user_id": user_id,
+                })
+            )
+            
+
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            return render(data={'error': True, 'message': str(e)})
     
     
     
@@ -240,8 +281,33 @@ class Views:
         else:
             return render("web/pages/registration/register.html")
         
+        
+        
     
-    
+    @eel.expose
+    def select_users_for_add():
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+            
+            response = requests.get(
+                url=f"{HOST}select_users_for_add",
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Token {data["token"]}'
+                }
+            )
+            
+            if response.status_code == 200:
+                response_data = response.json()
+                print(response_data.get('users', []))
+                return response_data.get('users', [])
+            else:
+                return render(data={'error': True, 'message': f'Ошибка {response.status_code}'})
+                
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            return render(data={'error': True, 'message': str(e)})
     
 
 

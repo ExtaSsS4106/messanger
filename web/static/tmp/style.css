@@ -1,163 +1,153 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* ===== ОСНОВНЫЕ СТИЛИ (от одногруппника) ===== */
 body {
-    background-color: #2B2F33;
-    font-family: "Roboto", sans-serif;
-
-}
-.messagebody {
-    background-color: #2B2F33;
-    font-family: "Roboto", sans-serif;
-    height: 95vh;
-    margin-top: 30px;
-    padding: 0px;
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    grid-template-rows: 100%;
-    gap: 5px;
-
+    background-color: #5E5E5E;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 90vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
 }
 
 /* Заголовок главный */
 .titlehead {
-    display: block;
     text-align: center;
-    font-family: "Roboto", sans-serif;
+    font-family: "Amatic SC", sans-serif;
     color: white;
     font-size: 90px;
 }
 
-.hometitle{
-    display: flex;
-    background-color: #496175;
-    margin: auto;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 480px;
-    height: 320px;
-    border: 2mm outset rgb(48, 64, 77);
-    border-radius: 60px;
-    gap: 20px;
-    padding: 0px;
-    -webkit-box-shadow: 3px 16px 28px 7px rgba(166, 217, 255, 0.14);
-    -moz-box-shadow: 3px 16px 28px 7px rgba(166, 217, 255, 0.14);
-    box-shadow: 3px 16px 28px 7px rgba(166, 217, 255, 0.14);
-    
-
-}
-
 /* Кнопки на главной */
 .regbtn {
+    position: absolute;
     height: 2em;
-    background-color: #3A89CA;
+    margin: 0;
+    top: 30%;
+    left: 44.5%;
+    background-color: #61FF41;
     color: white;
     font-size: 35px;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     width: 240px;
     padding: 0;
-    border: 1mm ridge rgb(76, 105, 131);
-    border-radius: 25px;
+    border: none;
+    border-radius: 15px;
     cursor: pointer;
 }
 .regbtn:hover {
-    background-color: #21547d;
+    background-color: #14a20a;
 }
 
 .logbtn {
+    position: absolute;
     height: 2em;
-    background-color: #3B444B;
+    margin: 0;
+    top: 40%;
+    left: 47.2%;
+    background-color: #7E7E7E;
     color: white;
     font-size: 30px;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     width: 120px;
     padding: 0;
-    border: 1mm ridge rgb(76, 105, 131);
-    border-radius: 25px;
+    border: none;
+    border-radius: 15px;
     cursor: pointer;
 }
 .logbtn:hover {
-    background-color: #2d3439;
+    background-color: #686868;
 }
 
 /* Формы регистрации/входа */
 .form {
-    display: flex;
     max-width: 540px;
     padding: 15px;
     margin: 240px auto;
-    background-color: #2d3439;
+    background-color: #989797;
     border-radius: 15px;
-    border: 1mm solid rgb(76, 105, 131);
-    font: 25px sans-serif;
 }
 
 .input {
+    display: block;
     width: 95%;
     padding: 15px 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    background-color: #2B2F33;
-    color: white;
     border-radius: 15px;
     font-size: 16px;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .reglogbtn {
-    margin: auto 135px;
+    display: block;
+    margin: 0 auto;
     width: 50%;
     padding: 15px 10px;
     border: 0;
     border-radius: 15px;
-    background-color: #3A89CA;
+    background-color: #1cbc11;
     cursor: pointer;
     font-size: 25px;
     color: white;
 }
 .reglogbtn:hover {
-    background-color: #21547d;
+    background-color: #14a20a;
 }
 
 .titlereglog {
     text-align: center;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
 }
 
+/* ===== ТВОИ СТИЛИ ДЛЯ МЕССЕНДЖЕРА ===== */
 .panel-control {
-    height: 98%;
-    background-color: #3B444B;
-    border-radius: 25px;
-    border: 2mm ridge rgb(73, 97, 117);
-    padding: 16px;
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr 12fr 1fr;
-    gap: 16px;
-    box-sizing: border-box;
-}
+    width: 20%;
+    height: 90%;
+    margin: 50px auto;
+    padding: 15px;
+    background-color: #989797;
+    border-radius: 15px;
 
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
 .messages{
     width: 100%;
     flex-grow: 1;
-    background-color: #2a3035;
+    background-color: #5E5E5E;
     border-radius: 20px;
     overflow-y: auto;
 }
 .messenger-chat {
-    height: 95%;
-    background-color: #3B444B;
-    border-radius: 25px;
-    border: 2mm ridge rgb(73, 97, 117);
-    padding: 11px;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 16px;
+    flex-grow: 1;
+    width: 80%;
+    height: 90%;
+    margin: 50px auto;
+    padding: 15px;
+    background-color: #989797;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
 }
 .user-header {
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 32px;
     text-align: center;
@@ -165,31 +155,24 @@ body {
 }
 
 .chatsList{
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    width: 90%;
+    width: 100%;
+    flex-grow: 1;
     overflow-y: auto;
-    gap: 5px 5px;
-    padding: 10px 5px 10px 10px;
-    background-color: #2a3035;
-    border-radius: 25px;
 }
 
 .search-input {
-    width: 90%;
+    width: 95%;
     padding: 15px 10px;
     margin: 10px auto 20px;
     display: block;
-    border: 1px solid #000000;
+    border: 1px solid #ccc;
     border-radius: 15px;
-    font-size: 18px;
-    font-family: "Roboto", sans-serif;
-    background-color: #2B2F33;
-    color: #496175;
-    
+    font-size: 16px;
+    background-color: #7E7E7E;
+    color: white;
 }
 .search-input::placeholder {
-    color: #496175;
+    color: #ccc;
 }
 
 .tabs {
@@ -199,15 +182,15 @@ body {
     margin-bottom: 20px;
 }
 .tab {
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 20px;
     cursor: pointer;
     padding: 5px 10px;
 }
 .tab.active {
-    color: #1E94F5;
-    border-bottom: 2px solid #1E94F5;
+    color: #61FF41;
+    border-bottom: 2px solid #61FF41;
 }
 
 .user-item {
@@ -215,22 +198,21 @@ body {
     align-items: center;
     padding: 10px;
     margin-bottom: 5px;
-    background-color: #496175;
-    border-radius: 25px;
+    background-color: #7E7E7E;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.15s;
 }
 .user-avatar {
     width: 40px;
     height: 40px;
-    background-color: #D9D9D9;
+    background-color: #61FF41;
     border-radius: 50%;
     margin-right: 15px;
 }
 
 .user-name {
-    font-family: "Roboto", sans-serif;
-    color: #1E94F5;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     font-size: 18px;
 }
 
@@ -246,14 +228,14 @@ body {
     border-radius: 15px;
     font-size: 16px;
     cursor: pointer;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .action-btn.green {
-    background-color: #95cfff;
-    color: white;
+    background-color: #61FF41;
+    color: black;
 }
 .action-btn.gray {
-    background-color: #1E94F5;
+    background-color: #7E7E7E;
     color: white;
 }
 
@@ -265,10 +247,15 @@ body {
     margin-bottom: 20px;
     position: relative;
 }
-
+.back-btn {
+    color: #61FF41;
+    text-decoration: none;
+    font-size: 24px;
+    margin-right: 15px;
+}
 .chat-title {
     flex: 1;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 20px;
 }
@@ -281,7 +268,7 @@ body {
 }
 
 .message-left {
-    background-color: #4d545b;
+    background-color: #717171;
     padding: 12px 16px;
     border-radius: 15px;
     gap: 8px;
@@ -290,14 +277,13 @@ body {
     margin-bottom: 10px;
     margin-left: 10px;
     margin-top: 10px;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     word-wrap: break-word;
     overflow: hidden;
     color: white;
-    font-size: 20px;
 }
 .message-right {
-    background-color: #1E94F5;
+    background-color: #61FF41;
     padding: 12px 16px;
     border-radius: 15px;
     gap: 8px;
@@ -307,22 +293,20 @@ body {
     margin-left: auto;
     margin-right: 10px;
     margin-top: 10px;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     word-wrap: break-word;
     overflow: hidden;
-    color: white;
-    font-size: 20px;
+    color: black;
     direction: rtl;
 }
 
 .user-avatar-small {
     width: 30px;
-    height: 40px;
-    min-width: 40px;
-    background-color: white;
+    height: 30px;
+    min-width: 30px;
+    background-color: #000;
     border-radius: 50%;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .message-input-area {
@@ -333,22 +317,20 @@ body {
 }
 .message-field {
     flex: 1;
-    padding: 22px;
-    border: 2px solid #000000;
+    padding: 15px;
+    border: 1px solid #ccc;
     border-radius: 15px;
-    font-size: 18px;
-    font-family: "Roboto", sans-serif;
-    background-color: #496175;
-    color: #1E94F5;
+    font-size: 16px;
+    background-color: #7E7E7E;
+    color: white;
 }
 .send-btn {
     padding: 15px 25px;
-    background-color: #1E94F5;
+    background-color: #61FF41;
     border: none;
     border-radius: 15px;
     font-size: 16px;
     cursor: pointer;
-    
 }
 
 /* Контекстное меню */
@@ -374,7 +356,7 @@ body {
     border: none;
     color: white;
     text-align: left;
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     cursor: pointer;
 }
 .menu-item:hover {
@@ -397,7 +379,7 @@ body {
     text-align: center;
 }
 .user-id {
-    font-family: "Roboto", sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 24px;
     margin-bottom: 20px;
@@ -405,7 +387,7 @@ body {
 
 /* Стили для создания канала */
 .friends-list {
-    background-color: #496175;
+    background-color: #7E7E7E;
     border-radius: 15px;
     padding: 15px;
     margin-bottom: 20px;
@@ -415,7 +397,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px solid #334452;
+    border-bottom: 1px solid #5E5E5E;
 }
 .friend-row:last-child {
     border-bottom: none;
@@ -428,27 +410,13 @@ body {
 .friend-avatar {
     width: 35px;
     height: 35px;
-    background-color: #ffffff;
+    background-color: #61FF41;
     border-radius: 50%;
 }
 .add-btn {
     padding: 5px 15px;
-    background-color: #3A89CA;
+    background-color: #61FF41;
     border: none;
     border-radius: 10px;
     cursor: pointer;
 }
-
-.channel-input{
-    width: 90%;
-    padding: 15px 10px;
-    margin: 10px auto 20px;
-    display: block;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    font-size: 18px;
-    font-family: "Roboto", sans-serif;
-    background-color: #2B2F33;
-    color: #496175;
-}
-

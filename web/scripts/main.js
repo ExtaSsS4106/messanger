@@ -19,7 +19,6 @@
                     : 'message-left';
                 div.innerHTML = `
                     <div>${msg.user}</div>
-                    <div class="user-avatar-small"></div>
                     <div class="message-text">${msg.text}</div>
                 `;
                 container.appendChild(div);
@@ -171,10 +170,26 @@
                         chat_id: friend.chat_id
                     });
                     
+
                     friendDiv.innerHTML = `
-                        <div class="user-avatar"></div>
-                        <span class="user-name">${friend.name}</span>
-                    `;
+                    <div class="user-avatar"></div>
+                    <span class="user-name">${friend.name}</span>
+                    <button onclick="eel.remove_friend_api(${friend.id})();" 
+                            style="background: #ff4444; 
+                                color: white; 
+                                border: none; 
+                                border-radius: 4px; 
+                                padding: 5px 10px; 
+                                margin-left: 10px;
+                                cursor: pointer;
+                                font-size: 12px;
+                                transition: background 0.2s;
+                                hover: {background: #ff6666;}"
+                            onmouseover="this.style.background='#ff6666'"
+                            onmouseout="this.style.background='#ff4444'">
+                        ✕ Удалить
+                    </button>
+                `;
                     container.appendChild(friendDiv);
                 });
                 
@@ -211,7 +226,6 @@
                     friendreqDiv.innerHTML = `
                         <div class="user-avatar"></div>
                         <span class="user-name">${data.friend_name}</span>
-                        <button class="accept-btn">✓</button>
                     `;
                     container.appendChild(friendreqDiv);
                 });
@@ -343,6 +357,8 @@
         }
 
         function start_main_page(){
+
+            switchTab('chats');
             const messageInput = document.getElementById('messageInput');
 
             messageInput.addEventListener('keydown', function(event) {

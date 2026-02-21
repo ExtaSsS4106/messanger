@@ -1,13 +1,11 @@
-        let friends = JSON.parse(localStorage.getItem('friends')) || [
-            {id: 123456, name: 'User#123456', selected: false},
-            {id: 654321, name: 'User#654321', selected: false},
-            {id: 789012, name: 'User#789012', selected: false}
-        ];
 
-        function displayFriends() {
+        let selectedFriends = [];
+        async function displayFriendsForCCpage() {
             const container = document.getElementById('friendsList');
             container.innerHTML = '';
-            friends.forEach((friend, index) => {
+            const friends = await eel.select_friends()();
+            console.log(friends)
+            friends.forEach((friend) => {
                 const row = document.createElement('div');
                 row.className = 'friend-row';
                 row.innerHTML = `
@@ -15,7 +13,7 @@
                         <div class="friend-avatar"></div>
                         <span class="friend-name">${friend.name}</span>
                     </div>
-                    <button class="add-btn" onclick="toggleFriend(${index})">${friend.selected ? 'Добавлен' : 'Добавить'}</button>
+                    <input type="checkbox" id="scales" name="scales" checked />
                 `;
                 container.appendChild(row);
             });
@@ -39,18 +37,6 @@
                 return;
             }
 
-            const channels = JSON.parse(localStorage.getItem('channels')) || [];
-            const newChannel = {
-                id: 'channel_' + Date.now(),
-                name: channelName,
-                members: selectedFriends,
-                createdAt: new Date().toISOString()
-            };
-            channels.push(newChannel);
-            localStorage.setItem('channels', JSON.stringify(channels));
-
-            alert(`Канал "${channelName}" создан!`);
-            window.location.href = 'chats.html';
         }
 
-        displayFriends();
+        
