@@ -39,6 +39,40 @@ def sign_up(request):
 @login_required
 def home(request):
     return render(request, 'main/home.html')
+@login_required
+def remove_friend_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            
+            other_user = get_object_or_404(User, id=user_id)
+            
+            user1_id = min(request.user.id, other_user.id)
+            user2_id = max(request.user.id, other_user.id)
+            
+            friendship = Friends.objects.get(
+                user1_id=user1_id, 
+                user2_id=user2_id
+            )
+            
+            friendship.delete()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Friend removed successfully'
+            })
+            
+        except Friends.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'Friendship not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
 
 # Заявки в друзья
 @login_required
@@ -58,6 +92,7 @@ def send_friend_request(request, user_id):
 def accept_friend_request(request, request_id):
     fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
     fr.accept()
+    fr.delete()
     return redirect("home")
 
 @login_required

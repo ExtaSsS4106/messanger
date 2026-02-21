@@ -149,6 +149,41 @@ def select_chats(request):
     return JsonResponse({"users_chats": data})
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_friend_api(request):
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        
+        other_user = get_object_or_404(User, id=user_id)
+        
+        user1_id = min(request.user.id, other_user.id)
+        user2_id = max(request.user.id, other_user.id)
+        
+        friendship = Friends.objects.get(
+            user1_id=user1_id, 
+            user2_id=user2_id
+        )
+        
+        friendship.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Friend removed successfully'
+        })
+        
+    except Friends.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Friendship not found'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])   
 def send_friend_request(request):
     data = json.loads(request.body)
@@ -191,7 +226,7 @@ def chek_for_friends_requests(request):
     
     data = []
     for fr in fr_requsets:
-        if fr.accept == True:
+        if fr.accepted:
             fr.delete()
             continue
         data.append({

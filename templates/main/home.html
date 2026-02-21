@@ -276,16 +276,42 @@ function loadFriends() {
             friends.forEach(friend => {
                 const div = document.createElement('div');
                 div.className = 'user-item';
-                div.onclick = () => openPrivateChat(friend.id, friend.username);
                 div.innerHTML = `
                     <div class="user-avatar"></div>
                     <span>${friend.username}</span>
+                    <button onclick="remove_friend_api(${friend.id})();" 
+                            style="background: #ff4444; 
+                                color: white; 
+                                border: none; 
+                                border-radius: 4px; 
+                                padding: 5px 10px; 
+                                margin-left: 10px;
+                                cursor: pointer;
+                                font-size: 12px;
+                                transition: background 0.2s;
+                                hover: {background: #ff6666;}"
+                            onmouseover="this.style.background='#ff6666'"
+                            onmouseout="this.style.background='#ff4444'">
+                        ✕ Удалить
+                    </button>
                 `;
                 container.appendChild(div);
             });
         });
 }
+function remove_friend_api(user_id){
+    fetch(`remove_friend_api`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user_id: user_id,
+        })
 
+    });
+}
 function loadFriendRequests() {
     fetch('/api/friend-requests/')
         .then(response => response.json())

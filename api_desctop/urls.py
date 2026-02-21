@@ -17,4 +17,6 @@ urlpatterns = [
     path('decline_friend_request', views.decline_friend_request),
     path('chek_for_friends_requests', views.chek_for_friends_requests),
     path('select_users_for_add', views.select_users_for_add),
+    path('remove_friend_api', views.remove_friend_api),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

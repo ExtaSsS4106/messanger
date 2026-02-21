@@ -6,10 +6,14 @@ from django.utils import timezone
 # ---------- Дружба ----------
 class Friends(models.Model):
     user1 = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='friendships1', on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, 
+        related_name='friendships1', 
+        on_delete=models.CASCADE
     )
     user2 = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='friendships2', on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, 
+        related_name='friendships2', 
+        on_delete=models.CASCADE
     )
 
     class Meta:
@@ -27,6 +31,20 @@ class Friends(models.Model):
         if self.user1_id > self.user2_id:
             self.user1, self.user2 = self.user2, self.user1
         super().save(*args, **kwargs)
+        
+    def delete(self, *args, **kwargs):
+        with transaction.atomic():
+            chat = Chat.objects.filter(
+                type=Chat.PRIVATE,
+                users=self.user1
+            ).filter(
+                users=self.user2
+            ).first()
+            
+            if chat:
+                chat.delete()
+            
+            super().delete(*args, **kwargs)
 
 # ---------- Чаты ----------
 class Chat(models.Model):
