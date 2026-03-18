@@ -5,9 +5,6 @@ from .render import render
 
 class Views:
 
-    """                        data=json.dumps({ 
-                        "token": data['token'],
-                    }),"""
     @eel.expose
     def GET_HOST():
         return HOST
@@ -107,13 +104,13 @@ class Views:
             return render(data={'error': True, 'message': str(e)})
     
     @eel.expose
-    def select_friends():
+    def select_products():
         try:
             with open('data.json', 'r', encoding='utf-8') as file:
                 data = json.load(file)
             
             response = requests.get(
-                url=f"{HOST}select_friends",
+                url=f"{HOST}select_all",
                 headers={
                     'Content-Type': 'application/json',
                     'Authorization': f'Token {data["token"]}'
@@ -122,8 +119,8 @@ class Views:
             
             if response.status_code == 200:
                 response_data = response.json()
-                print(response_data.get('friends_list', []))
-                return response_data.get('friends_list', [])
+                print(response_data.get('data', []))
+                return response_data['data']['data']
             else:
                 return render(data={'error': True, 'message': f'Ошибка {response.status_code}'})
                 
@@ -132,101 +129,10 @@ class Views:
             return render(data={'error': True, 'message': str(e)})
         
         
-    @eel.expose
-    def accept_friend_request(request_id):
-        try:
-            with open('data.json', 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            
-            response = requests.post(
-                url=f"{HOST}accept_friend_request",
-                headers={
-                    'Content-Type': 'application/json',
-                    'Authorization': f'Token {data["token"]}'
-                },
-                data=json.dumps({
-                    "request_id": request_id,
-                })
-            )
-            
-            response_data = response.json()
-            print(response_data.get('messages', []))
-            return response_data.get('messages', [])
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return render(data={'error': True, 'message': str(e)})
-        
-        
-    @eel.expose
-    def get_messages(chat_id):
-        try:
-            with open('data.json', 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            
-            response = requests.post(
-                url=f"{HOST}get_messages",
-                headers={
-                    'Content-Type': 'application/json',
-                    'Authorization': f'Token {data["token"]}'
-                },
-                data=json.dumps({
-                    "chat_id": chat_id,
-                })
-            )
-            
-            response_data = response.json()
-            print(response_data.get('messages', []))
-            return response_data.get('messages', [])
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return render(data={'error': True, 'message': str(e)})
-        
-    @eel.expose
-    def send_message(message_data):
-        try:
-            with open('data.json', 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            print(message_data.get('chat'))
-            response = requests.post(
-                url=f"{HOST}send_message",
-                headers={
-                    'Content-Type': 'application/json',
-                    'Authorization': f'Token {data["token"]}'
-                },
-                data=json.dumps({
-                    "chat_id": message_data.get('chat'),
-                    "text": message_data.get('text'),
-                    "type": message_data.get('type'),
-                    "file": message_data.get('file')
-                    
-                })
-            )
-            
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return render(data={'error': True, 'message': str(e)})
-        
-    @eel.expose
-    def chek_for_friends_requests():
-        try:
-            with open('data.json', 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            
-            response = requests.get(
-                url=f"{HOST}chek_for_friends_requests",
-                headers={
-                    'Content-Type': 'application/json',
-                    'Authorization': f'Token {data["token"]}'
-                },
 
-            )
-            
-            friends_requsets = response.json()
-            print(friends_requsets.get('friends_requsets', []))
-            return friends_requsets.get('friends_requsets', [])
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return render(data={'error': True, 'message': str(e)})
+        
+
+
         
         
         
@@ -284,31 +190,7 @@ class Views:
         
         
     
-    @eel.expose
-    def select_users_for_add():
-        try:
-            with open('data.json', 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            
-            response = requests.get(
-                url=f"{HOST}select_users_for_add",
-                headers={
-                    'Content-Type': 'application/json',
-                    'Authorization': f'Token {data["token"]}'
-                }
-            )
-            
-            if response.status_code == 200:
-                response_data = response.json()
-                print(response_data.get('users', []))
-                return response_data.get('users', [])
-            else:
-                return render(data={'error': True, 'message': f'Ошибка {response.status_code}'})
-                
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return render(data={'error': True, 'message': str(e)})
-    
+
 
 
     
