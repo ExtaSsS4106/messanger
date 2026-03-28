@@ -14,8 +14,8 @@
         
         body {
             font-family: Arial, sans-serif;
-            background: #555;
-            color: #fff;
+            background: #f4f8ff;
+            color: #0b1a33;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,7 +25,7 @@
         .container {
             width: 100%;
             max-width: 600px;
-            background: #666;
+            background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             overflow: hidden;
@@ -33,16 +33,16 @@
         
         /* Заголовок */
         .header {
-            background: #555;
+            background: #f4f8ff;
             padding: 20px;
-            border-bottom: 1px solid #777;
+            border-bottom: 1px solid #e7efff;
             display: flex;
             align-items: center;
         }
         
         .back-button {
-            background: #777;
-            color: #fff;
+            background: #e7efff;
+            color: #0b1a33;
             border: none;
             border-radius: 6px;
             padding: 8px 15px;
@@ -53,11 +53,11 @@
         }
         
         .back-button:hover {
-            background: #888;
+            background: #d5e1f7;
         }
         
         h1 {
-            color: #0f0;
+            color: #1f66ff;
             font-size: 24px;
             font-weight: bold;
         }
@@ -65,7 +65,7 @@
         /* Форма */
         .form-section {
             padding: 25px;
-            background: #666;
+            background: #ffffff;
         }
         
         .form-group {
@@ -75,7 +75,7 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #ccc;
+            color: #6b7a99;
             font-weight: bold;
             font-size: 14px;
         }
@@ -83,26 +83,26 @@
         .form-input {
             width: 100%;
             padding: 12px 15px;
-            background: #777;
-            border: 1px solid #888;
+            background: #e7efff;
+            border: 1px solid #d5e1f7;
             border-radius: 8px;
-            color: #fff;
+            color: #0b1a33;
             font-size: 16px;
             outline: none;
             transition: all 0.2s;
         }
         
         .form-input:focus {
-            border-color: #0f0;
-            background: #6a6a6a;
+            border-color: #1f66ff;
+            background: #dbe7ff;
         }
         
         .form-input::placeholder {
-            color: #aaa;
+            color: #6f7ea3;
         }
         
         .input-hint {
-            color: #aaa;
+            color: #6f7ea3;
             font-size: 12px;
             margin-top: 5px;
             padding-left: 5px;
@@ -112,24 +112,24 @@
         .search-box {
             width: 100%;
             padding: 10px 15px;
-            background: #777;
-            border: 1px solid #888;
+            background: #e7efff;
+            border: 1px solid #d5e1f7;
             border-radius: 8px;
-            color: #fff;
+            color: #0b1a33;
             font-size: 14px;
             outline: none;
             margin-bottom: 15px;
         }
         
         .search-box:focus {
-            border-color: #0f0;
+            border-color: #1f66ff;
         }
         
         /* Список друзей */
         .friends-list {
             max-height: 300px;
             overflow-y: auto;
-            background: #5a5a5a;
+            background: #f4f8ff;
             border-radius: 8px;
             padding: 10px;
             margin-top: 10px;
@@ -139,7 +139,7 @@
             display: flex;
             align-items: center;
             padding: 12px;
-            background: #666;
+            background: #ffffff;
             margin: 5px 0;
             border-radius: 8px;
             transition: all 0.2s;
@@ -148,21 +148,21 @@
         }
         
         .friend-item:hover {
-            background: #777;
+            background: #e7efff;
             transform: translateX(5px);
         }
         
         .friend-item.selected {
-            background: #4a6a4a;
-            border-color: #0f0;
+            background: #dbe7ff;
+            border-color: #1f66ff;
         }
         
         .friend-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #0f0;
-            color: #000;
+            background: #1f66ff;
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -179,20 +179,20 @@
         .friend-name {
             font-weight: bold;
             font-size: 16px;
-            color: #fff;
+            color: #0b1a33;
         }
         
         .friend-username {
             font-size: 12px;
-            color: #ccc;
+            color: #6b7a99;
         }
         
         .check-icon {
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background: #0f0;
-            color: #000;
+            background: #1f66ff;
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -203,14 +203,14 @@
         
         /* Выбранные участники */
         .selected-section {
-            background: #5a5a5a;
+            background: #f4f8ff;
             border-radius: 8px;
             padding: 15px;
             margin: 20px 0;
         }
         
         .selected-title {
-            color: #ccc;
+            color: #6b7a99;
             font-size: 14px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -224,8 +224,8 @@
         }
         
         .selected-badge {
-            background: #0f0;
-            color: #000;
+            background: #1f66ff;
+            color: #ffffff;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 14px;
@@ -255,7 +255,7 @@
         }
         
         .empty-selected {
-            color: #888;
+            color: #6f7ea3;
             font-style: italic;
             padding: 10px 0;
         }
@@ -269,8 +269,8 @@
         
         .submit-button {
             flex: 2;
-            background: #0f0;
-            color: #000;
+            background: #1f66ff;
+            color: #ffffff;
             border: none;
             border-radius: 8px;
             padding: 14px;
@@ -281,13 +281,13 @@
         }
         
         .submit-button:hover {
-            background: #0c0;
+            background: #1a54cc;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,255,0,0.3);
+            box-shadow: 0 5px 15px rgba(31, 102, 255, 0.3);
         }
         
         .submit-button:disabled {
-            background: #888;
+            background: #d5e1f7;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -295,8 +295,8 @@
         
         .cancel-button {
             flex: 1;
-            background: #777;
-            color: #fff;
+            background: #e7efff;
+            color: #0b1a33;
             border: none;
             border-radius: 8px;
             padding: 14px;
@@ -307,7 +307,7 @@
         }
         
         .cancel-button:hover {
-            background: #888;
+            background: #d5e1f7;
         }
         
         /* Ошибки */
@@ -327,16 +327,16 @@
         }
         
         .friends-list::-webkit-scrollbar-track {
-            background: #555;
+            background: #f4f8ff;
         }
         
         .friends-list::-webkit-scrollbar-thumb {
-            background: #888;
+            background: #d5e1f7;
             border-radius: 4px;
         }
         
         .friends-list::-webkit-scrollbar-thumb:hover {
-            background: #999;
+            background: #c7d4ef;
         }
         
         /* Анимации */
@@ -377,7 +377,7 @@
                 
                 <!-- Название группы -->
                 <div class="form-group">
-                    <label for="name">Название группы <span style="color: #888;">(необязательно)</span></label>
+                    <label for="name">Название группы <span style="color: #6f7ea3;">(необязательно)</span></label>
                     <input type="text" 
                            class="form-input" 
                            id="name" 
@@ -412,7 +412,7 @@
                             <div class="check-icon" id="check-{{ friend.id }}" style="display: none;">✓</div>
                         </div>
                         {% empty %}
-                        <div style="text-align: center; color: #888; padding: 30px;">
+                        <div style="text-align: center; color: #6f7ea3; padding: 30px;">
                             <span style="font-size: 40px; display: block; margin-bottom: 10px;">👥</span>
                             У вас пока нет друзей<br>
                             <small>Добавьте друзей, чтобы создать групповой чат</small>

@@ -14,8 +14,8 @@
         
         body {
             font-family: Arial, sans-serif;
-            background: #555;
-            color: #fff;
+            background: #f4f8ff;
+            color: #0b1a33;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,20 +25,20 @@
         .container {
             width: 100%;
             max-width: 500px;
-            background: #666;
+            background: #ffffff;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
         
         h1 {
-            color: #0f0;
+            color: #1f66ff;
             margin-bottom: 20px;
             text-align: center;
         }
         
         .chat-info {
-            background: #777;
+            background: #e7efff;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 25px;
@@ -47,7 +47,7 @@
         .chat-name {
             font-size: 18px;
             font-weight: bold;
-            color: #0f0;
+            color: #1f66ff;
         }
         
         .form-group {
@@ -57,27 +57,27 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #ccc;
+            color: #6b7a99;
         }
         
         input, select {
             width: 100%;
             padding: 12px;
-            background: #777;
-            border: 1px solid #888;
+            background: #e7efff;
+            border: 1px solid #d5e1f7;
             border-radius: 6px;
-            color: #fff;
+            color: #0b1a33;
             font-size: 16px;
         }
         
         input:focus {
             outline: none;
-            border-color: #0f0;
+            border-color: #1f66ff;
         }
         
         .hint {
             font-size: 12px;
-            color: #aaa;
+            color: #6f7ea3;
             margin-top: 5px;
         }
         
@@ -93,22 +93,22 @@
         }
         
         .btn-green {
-            background: #0f0;
-            color: #000;
+            background: #1f66ff;
+            color: #ffffff;
         }
         
         .btn-green:hover {
-            background: #0c0;
+            background: #1a54cc;
             transform: translateY(-2px);
         }
         
         .btn-gray {
-            background: #777;
-            color: #fff;
+            background: #e7efff;
+            color: #0b1a33;
         }
         
         .btn-gray:hover {
-            background: #888;
+            background: #d5e1f7;
         }
         
         .actions {
@@ -133,7 +133,7 @@
         
         <div class="chat-info">
             <div class="chat-name">{{ chat.name|default:'Групповой чат' }}</div>
-            <div style="font-size: 14px; color: #ccc; margin-top: 5px;">
+            <div style="font-size: 14px; color: #6b7a99; margin-top: 5px;">
                 ID: {{ chat.id }} • {{ chat.users.count }} участников
             </div>
         </div>

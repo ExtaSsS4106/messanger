@@ -6,7 +6,7 @@ from django.db import transaction
 from django.utils import timezone
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from .forms import CreateGroupChatForm, RegisterForm
+from .forms import CreateGroupChatForm, RegisterForm, ProfileForm
 from .models import Chat, UserChat, Message, Friends, FriendRequest, ChatInvite
 from django.db import models
 import json
@@ -31,7 +31,10 @@ def index(request):
 @login_required(login_url='/login')
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    next_url = request.GET.get('next')
+    if next_url:
+        return redirect(next_url)
+    return redirect('/login')
 
 def sign_up(request):
     if request.method == 'POST':
@@ -48,6 +51,17 @@ def sign_up(request):
 @login_required
 def home(request):
     return render(request, 'main/home.html')
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return render(request, "main/profile.html", {"form": form, "saved": True})
+    else:
+        form = ProfileForm(instance=request.user)
+    return render(request, "main/profile.html", {"form": form})
 
 # Заявки в друзья
 @login_required
@@ -280,14 +294,21 @@ def send_message_api(request, chat_id):
     try:
         chat = get_object_or_404(Chat, id=chat_id, users=request.user)
         
-        # Получаем данные из запроса
-        try:
-            data = json.loads(request.body)
-            text = data.get('text', '').strip()
-        except:
+        # Получаем данные из запроса (JSON или multipart)
+        file_obj = None
+        text = ''
+        if request.content_type and request.content_type.startswith('multipart/form-data'):
+            file_obj = request.FILES.get('file')
             text = request.POST.get('text', '').strip()
+        else:
+            try:
+                data = json.loads(request.body)
+                text = data.get('text', '').strip()
+            except:
+                text = request.POST.get('text', '').strip()
+                file_obj = request.FILES.get('file')
         
-        if not text:
+        if not text and not file_obj:
             return JsonResponse({'error': 'Пустое сообщение'}, status=400)
         
         # Создаем сообщение
@@ -295,7 +316,8 @@ def send_message_api(request, chat_id):
             chat=chat,
             user=request.user,
             text=text,
-            type=Message.TEXT,
+            file=file_obj if file_obj else None,
+            type=Message.FILE if file_obj else Message.TEXT,
             created_at=timezone.now(),
             is_read=False,
             is_deleted=False
@@ -305,13 +327,21 @@ def send_message_api(request, chat_id):
         chat.updated_at = message.created_at
         chat.save(update_fields=['updated_at'])
         
-        return JsonResponse({
+        response = {
             'id': message.id,
             'user_id': request.user.id,
             'username': request.user.username,
             'text': message.text,
             'created_at': message.created_at.isoformat(),
-        }, status=201)
+        }
+
+        if message.file:
+            response['file_url'] = message.file.url
+            response['file_name'] = os.path.basename(message.file.name)
+            response['file_size'] = message.file.size if hasattr(message.file, 'size') else None
+            response['type'] = 'file'
+
+        return JsonResponse(response, status=201)
         
     except Exception as e:
         print(f"ERROR: {str(e)}")

@@ -151,8 +151,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #555;
-    color: #fff;
+    background: #f4f8ff;
+    color: #0b1a33;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -170,7 +170,7 @@ body {
 .register-card {
     width: 100%;
     max-width: 450px;
-    background: #666;
+    background: #ffffff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     overflow: hidden;
@@ -190,14 +190,14 @@ body {
 
 /* Заголовок */
 .card-header {
-    background: #555;
+    background: #f4f8ff;
     padding: 30px 30px 20px;
     text-align: center;
-    border-bottom: 2px solid #777;
+    border-bottom: 2px solid #e7efff;
 }
 
 .logo {
-    color: #0f0;
+    color: #1f66ff;
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -206,13 +206,13 @@ body {
 }
 
 .title {
-    color: #fff;
+    color: #0b1a33;
     font-size: 24px;
     margin-bottom: 5px;
 }
 
 .subtitle {
-    color: #aaa;
+    color: #6f7ea3;
     font-size: 14px;
 }
 
@@ -229,14 +229,14 @@ label {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #ccc;
+    color: #6b7a99;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
 }
 
 label i {
-    color: #0f0;
+    color: #1f66ff;
     font-size: 16px;
 }
 
@@ -249,36 +249,36 @@ label i {
 .form-input {
     width: 100%;
     padding: 14px 16px;
-    background: #777;
-    border: 2px solid #888;
+    background: #e7efff;
+    border: 2px solid #d5e1f7;
     border-radius: 10px;
-    color: #fff;
+    color: #0b1a33;
     font-size: 15px;
     transition: all 0.3s ease;
     outline: none;
 }
 
 .form-input:focus {
-    border-color: #0f0;
-    background: #6a6a6a;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    border-color: #1f66ff;
+    background: #dbe7ff;
+    box-shadow: 0 0 15px rgba(31, 102, 255, 0.2);
 }
 
 .form-input::placeholder {
-    color: #aaa;
+    color: #6f7ea3;
     font-size: 14px;
 }
 
 /* Требования к паролю */
 .password-requirements {
-    background: #5a5a5a;
+    background: #f4f8ff;
     border-radius: 10px;
     padding: 15px;
     margin: 15px 0 20px;
 }
 
 .requirements-title {
-    color: #ccc;
+    color: #6b7a99;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -289,7 +289,7 @@ label i {
 }
 
 .requirement {
-    color: #aaa;
+    color: #6f7ea3;
     font-size: 12px;
     margin: 6px 0;
     padding-left: 20px;
@@ -300,11 +300,11 @@ label i {
     content: "•";
     position: absolute;
     left: 5px;
-    color: #0f0;
+    color: #1f66ff;
 }
 
 .requirement.valid {
-    color: #0f0;
+    color: #1f66ff;
 }
 
 .requirement.valid::before {
@@ -329,7 +329,7 @@ label i {
 }
 
 .password-match.match {
-    color: #0f0;
+    color: #1f66ff;
 }
 
 .password-match.not-match {
@@ -380,14 +380,14 @@ label i {
 }
 
 .btn-primary {
-    background: #0f0;
-    color: #000;
+    background: #1f66ff;
+    color: #ffffff;
 }
 
 .btn-primary:hover {
-    background: #0c0;
+    background: #1a54cc;
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 5px 20px rgba(31, 102, 255, 0.3);
 }
 
 .btn-primary:active {
@@ -395,42 +395,42 @@ label i {
 }
 
 .btn-primary:disabled {
-    background: #888;
+    background: #d5e1f7;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
 }
 
 .btn-secondary {
-    background: #777;
-    color: #fff;
+    background: #e7efff;
+    color: #0b1a33;
 }
 
 .btn-secondary:hover {
-    background: #888;
+    background: #d5e1f7;
 }
 
 /* Ссылка на вход */
 .login-link {
     text-align: center;
     padding-top: 20px;
-    border-top: 1px solid #777;
+    border-top: 1px solid #e7efff;
 }
 
 .login-link span {
-    color: #aaa;
+    color: #6f7ea3;
     margin-right: 5px;
 }
 
 .login-link a {
-    color: #0f0;
+    color: #1f66ff;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s;
 }
 
 .login-link a:hover {
-    color: #0c0;
+    color: #1a54cc;
     text-decoration: underline;
 }
 
@@ -438,10 +438,10 @@ label i {
 .ip-address {
     text-align: center;
     padding: 15px;
-    background: #555;
-    color: #888;
+    background: #f4f8ff;
+    color: #6f7ea3;
     font-size: 12px;
-    border-top: 1px solid #777;
+    border-top: 1px solid #e7efff;
 }
 
 /* Анимация загрузки */
@@ -449,7 +449,7 @@ label i {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid #000;
+    border: 3px solid #1f66ff;
     border-radius: 50%;
     border-top-color: transparent;
     animation: spin 1s linear infinite;

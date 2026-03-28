@@ -28,6 +28,17 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "email"]
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-input", "placeholder": "Имя пользователя"}),
+            "first_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Имя"}),
+            "last_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Фамилия"}),
+            "email": forms.EmailInput(attrs={"class": "form-input", "placeholder": "Email"}),
+        }
         
 class CreateGroupChatForm(forms.Form):
     name = forms.CharField(
@@ -40,6 +51,5 @@ class CreateGroupChatForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         label="Выберите участников"
     )
-
 
 

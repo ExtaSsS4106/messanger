@@ -2,7 +2,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(146, 146, 146);
+  background-color: #f2f6ff;
   font-family: Arial, Helvetica, sans-serif;
   min-height: 100vh;
 }
@@ -12,7 +12,7 @@ body{
   justify-content: center;
   height: 600px;
   width: 700px;
-  background-color: #B3B3B3;
+  background-color: #e7efff;
   border-radius: 20px;
 }
 
@@ -29,7 +29,7 @@ body{
   
   /* Стилизация скроллбара для WebKit браузеров */
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #888 #f1f1f1; /* Firefox */
+  scrollbar-color: #d5e1f7 #f1f1f1; /* Firefox */
   gap: 40px;
 }
 
@@ -44,12 +44,12 @@ body{
 }
 
 .auth::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #d5e1f7;
   border-radius: 4px;
 }
 
 .auth::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #f4f8ff;
 }
 
 
@@ -64,9 +64,9 @@ input{
   height: 50px;
   font-size: 20px;
   border-radius: 10px;
-  background-color: rgb(87, 87, 87);
+  background-color: #e7efff;
   border: none;
-  color: white;
+  color: #0b1a33;
   text-indent: 10px;
 }
 

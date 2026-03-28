@@ -8,8 +8,10 @@ from .views import chat_detail, open_private_chat
 urlpatterns = [
     path('', views.index, name='index'),
     path('home', views.home, name="home"),
+    path('profile', views.profile, name='profile'),
     path('sign-up', views.sign_up, name='sign_up'),
     path('logout', views.logout_view, name='logout'),
+    path('logout/', views.logout_view),
     
     path("friends/remove/<int:user_id>/", views.remove_friend, name="remove_friend"),
     path('add-friend/', views.add_friend, name='add_friend'),  # ОДИН РАЗ!

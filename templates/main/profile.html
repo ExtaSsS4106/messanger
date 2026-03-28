@@ -1,0 +1,339 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #0b0b0b;
+            --panel: #141414;
+            --panel-2: #1c1c1c;
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --accent: #0a84ff;
+            --danger: #ff3b3b;
+            --line: #262626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", "Segoe UI", Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 28px 16px 40px;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 560px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .top-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 6px;
+        }
+
+        .profile-hero {
+            display: grid;
+            gap: 12px;
+            justify-items: center;
+            padding: 8px 0 12px;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .name {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .username {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .status-pill {
+            padding: 8px 18px;
+            background: var(--panel-2);
+            border-radius: 999px;
+            font-size: 14px;
+            color: var(--text);
+            border: 1px solid var(--line);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--line);
+            width: 100%;
+        }
+
+        .info-list {
+            background: var(--panel);
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 16px;
+            border-top: 1px solid var(--line);
+        }
+
+        .info-row:first-child {
+            border-top: none;
+        }
+
+        .info-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .info-title {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .info-value {
+            color: var(--text);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .form-card {
+            background: var(--panel);
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .form-row {
+            padding: 14px 16px;
+            border-top: 1px solid var(--line);
+        }
+
+        .form-row:first-child {
+            border-top: none;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #2b2b2b;
+            background: #121212;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .form-input:disabled {
+            color: #777;
+            background: #141414;
+            cursor: not-allowed;
+        }
+
+        .actions {
+            display: grid;
+            gap: 10px;
+            padding: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: var(--panel-2);
+            color: var(--text);
+            border: 1px solid var(--line);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .success {
+            margin: 0 16px 10px;
+            background: #0f1f39;
+            color: #8fb8ff;
+            border: 1px solid #1f3b70;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .error-list {
+            margin-top: 6px;
+            color: var(--danger);
+            font-size: 12px;
+        }
+
+        .action-hidden {
+            display: none;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top-title">Профиль</div>
+
+        <div class="profile-hero">
+            <div class="avatar">{{ request.user.username|first|upper }}</div>
+            <div class="name">{{ request.user.first_name|default:request.user.username }}</div>
+            <div class="username">@{{ request.user.username }}</div>
+            <div class="status-pill">Онлайн</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-list">
+            <div class="info-row">
+                <div class="info-icon">👤</div>
+                <div class="info-title">ID</div>
+                <div class="info-value">{{ request.user.id }}</div>
+            </div>
+        </div>
+
+        {% if saved %}
+        <div class="success">Данные сохранены</div>
+        {% endif %}
+
+        <div class="form-card">
+            <form method="post" id="profileForm">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label for="id_username">Имя пользователя</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <div class="error-list">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <label for="id_first_name">Имя</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                    <div class="error-list">{{ form.first_name.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <label for="id_last_name">Фамилия</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                    <div class="error-list">{{ form.last_name.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="error-list">{{ form.email.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn btn-ghost" id="editBtn">Редактировать</button>
+                    <button type="submit" class="btn btn-primary action-hidden" id="saveBtn" disabled>Сохранить</button>
+                    <button type="button" class="btn btn-secondary action-hidden" id="cancelBtn">Отмена</button>
+                    <a class="btn btn-secondary" href="{% url 'home' %}">На главную</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const hasErrors = {{ form.errors|yesno:"true,false" }};
+        const inputs = Array.from(document.querySelectorAll('#profileForm .form-input'));
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        function setEditMode(isEdit) {
+            inputs.forEach((input) => {
+                input.disabled = !isEdit;
+            });
+            saveBtn.classList.toggle('action-hidden', !isEdit);
+            cancelBtn.classList.toggle('action-hidden', !isEdit);
+            editBtn.classList.toggle('action-hidden', isEdit);
+            saveBtn.disabled = !isEdit;
+        }
+
+        editBtn.addEventListener('click', () => setEditMode(true));
+        cancelBtn.addEventListener('click', () => window.location.href = "{% url 'profile' %}");
+
+        setEditMode(hasErrors);
+    </script>
+</body>
+</html>
